@@ -2,7 +2,7 @@ from django.http import HttpResponse
 from django.shortcuts import render
 
 def index(request):
-    return HttpResponse('Главная страница сайта')
+    return render(request, 'site_notes/index.html')
 
 def notes(request):
     return HttpResponse('Мои конспекты')
