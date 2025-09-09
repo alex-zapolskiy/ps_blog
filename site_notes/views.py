@@ -5,13 +5,13 @@ def index(request):
     return render(request, 'site_notes/index.html')
 
 def notes(request):
-    return HttpResponse('Мои конспекты')
+    return render(request, 'site_notes/notes.html')
 
 def assistant(request):
-    return HttpResponse('Здесь скоро будет ассистент')
+    return render(request, 'site_notes/assistant.html')
 
 def contacts(request):
-    return HttpResponse('Здесь будут мои контакты')
+    return render(request, 'site_notes/contacts.html')
 
 def about(request):
-    return HttpResponse('О сайте')
+    return render(request, 'site_notes/about.html')
