@@ -1,4 +1,5 @@
 from django.db import models
+from django.urls import reverse
 
 class Sections(models.Model):
     name = models.CharField(max_length=30, )
@@ -6,6 +7,10 @@ class Sections(models.Model):
     
     def __str__(self):
         return self.title
+    
+    def get_absolute_url(self):
+        return reverse('list_chapters', kwargs={'section_slug': self.slug})
+    
     
 class Chapters(models.Model):
     name = models.CharField(max_length=30, unique=True, null=False)
@@ -17,3 +22,6 @@ class Chapters(models.Model):
     
     def __str__(self):
         return self.title
+    
+    # def get_absolute_url(self):
+    #     return reverse('list_chapters', kwargs={'section_slug': self.slug})
