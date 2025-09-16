@@ -6,7 +6,7 @@ class Sections(models.Model):
     slug = models.SlugField(max_length=15, db_index=True, unique=True)
     
     def __str__(self):
-        return self.title
+        return self.name
     
     def get_absolute_url(self):
         return reverse('list_chapters', kwargs={'section_slug': self.slug})
@@ -21,7 +21,7 @@ class Chapters(models.Model):
     section = models.ForeignKey('Sections', on_delete=models.PROTECT, related_name='chapter')
     
     def __str__(self):
-        return self.title
+        return self.name
     
-    # def get_absolute_url(self):
-    #     return reverse('list_chapters', kwargs={'section_slug': self.slug})
+    def get_absolute_url(self):
+        return reverse('chapter_text', kwargs={'section_slug': self.section.slug, 'chapter_text_slug': self.slug})

@@ -1,6 +1,6 @@
 from django.http import HttpResponse
 from django.shortcuts import render
-from django.views.generic import ListView
+from django.views.generic import ListView, DetailView
 from site_notes.models import Chapters, Sections
 
 
@@ -27,6 +27,19 @@ class ListChapters(ListSections):
     def get_queryset(self):
         section_slug = self.kwargs.get('section_slug')
         return Chapters.objects.filter(section__slug=section_slug)
+    
+
+class ChapterText(DetailView):
+    model = Chapters
+    template_name = 'site_notes/chapter_text.html'
+    slug_url_kwarg = 'chapter_text_slug'
+    context_object_name = 'chapter'
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['title'] = context['chapter'].name
+        return context
+        
 
 
 def assistant(request):
