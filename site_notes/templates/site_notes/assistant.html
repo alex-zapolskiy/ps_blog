@@ -1,3 +1,82 @@
 {% extends "base.html" %}
 {% block content%}
+<head>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+    
+    <form id="chatForm" method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Отправить</button>
+        <button type="button" id="stopButton" style="display: none;">Остановить</button>
+    </form>
+    
+    <div id="response" style="margin-top: 20px; padding: 10px; border: 1px solid #ccc; min-height: 100px;">
+        <!-- Ответ будет здесь -->
+    </div>
+
+<script>
+    $(document).ready(function() {
+        var xhr = null;
+        
+        $('#chatForm').on('submit', function(e) {
+            e.preventDefault();
+            
+            var formData = $(this).serialize();
+            var responseDiv = $('#response');
+            responseDiv.html('');
+            
+            // Показываем кнопку остановки
+            $('#stopButton').show();
+            
+            // Используем простой XMLHttpRequest
+            xhr = new XMLHttpRequest();
+            var receivedLength = 0;
+            
+            xhr.open('POST', window.location.href);
+            xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
+            xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+            
+            xhr.onprogress = function(e) {
+                if (xhr.readyState === 3 && xhr.status === 200) {
+                    var currentText = xhr.responseText;
+                    if (currentText.length > receivedLength) {
+                        var newText = currentText.substring(receivedLength);
+                        receivedLength = currentText.length;
+                        responseDiv.append(newText);
+                        responseDiv.scrollTop(responseDiv[0].scrollHeight);
+                    }
+                }
+            };
+            
+            xhr.onload = function() {
+                if (xhr.status === 200) {
+                    console.log('Запрос завершен');
+                    // Скрываем кнопку остановки после завершения
+                    $('#stopButton').hide();
+                }
+            };
+            
+            xhr.onerror = function() {
+                responseDiv.html('Ошибка при отправке запроса');
+                // Скрываем кнопку остановки при ошибке
+                $('#stopButton').hide();
+            };
+            
+            xhr.send(formData);
+        });
+        
+        // Обработчик для кнопки остановки
+        $('#stopButton').on('click', function() {
+            if (xhr && xhr.readyState !== 4) {
+                xhr.abort();
+                $('#response').append('<p><em>Запрос остановлен пользователем</em></p>');
+                $('#stopButton').hide();
+                console.log('Запрос остановлен');
+            }
+        });
+    });
+</script>
+</body>
 {% endblock%}
