@@ -48,9 +48,11 @@ class ChapterText(DetailView):
 
 
 def assistant(request):
+    
     if request.method == 'POST':
         form = AIChatForm(request.POST)
         if form.is_valid():
+            #получаем "чистые" данные из формы
             message = form.cleaned_data['message']
             model_ai = form.cleaned_data['model_ai']
             if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
@@ -71,7 +73,7 @@ def about(request):
     return render(request, 'site_notes/about.html')
 
 def AIRequest(user_input=None, model_ai=None):
-
+    #запрос к ИИ
     url = 'https://api.intelligence.io.solutions/api/v1/chat/completions'
 
     headers = {'Authorization': os.getenv('AI_KEY')}
@@ -94,7 +96,7 @@ def AIRequest(user_input=None, model_ai=None):
     }
     
     response = requests.post(url, headers=headers, json=data, stream=True)
-
+    #обработка ответа и парсинг json
     if response.status_code == 200:
         for line in response.iter_lines(decode_unicode=True):
             if line:

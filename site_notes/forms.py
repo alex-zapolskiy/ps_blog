@@ -4,6 +4,7 @@ from django import forms
 
 class AIChatForm(forms.Form):
     
+    #метод получение актуального списка моделей
     def get_list_models():
         url = "https://api.intelligence.io.solutions/api/v1/models"
 
