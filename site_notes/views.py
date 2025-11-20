@@ -6,7 +6,7 @@ from site_notes.forms import AIChatForm
 from site_notes.models import Chapters, Sections
 import json
 import requests
-import time
+import markdown2
 
 
 def index(request):
@@ -43,8 +43,8 @@ class ChapterText(DetailView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['title'] = context['chapter'].name
-        return context
-        
+        context['content'] = markdown2.markdown(context['chapter'].text)
+        return context        
 
 
 def assistant(request):

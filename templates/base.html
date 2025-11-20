@@ -25,11 +25,13 @@
         </nav>
         
         <main class="content">
+            {% autoescape off%}
             {% block content %}
             <div class="full-width-image">
                 <img src="{% static 'images/python.png' %}" alt="Python">
             </div>
             {% endblock %}
+            {% endautoescape %}
         </main>
         
         <footer>
