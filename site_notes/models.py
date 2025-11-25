@@ -11,6 +11,11 @@ class Sections(models.Model):
     def get_absolute_url(self):
         return reverse('list_chapters', kwargs={'section_slug': self.slug})
     
+    class Meta:
+        verbose_name = 'Раздел'
+        verbose_name_plural = 'Разделы'
+        ordering = ['name']
+    
     
 class Chapters(models.Model):
     name = models.CharField(max_length=30, unique=True, null=False)
@@ -25,3 +30,8 @@ class Chapters(models.Model):
     
     def get_absolute_url(self):
         return reverse('chapter_text', kwargs={'section_slug': self.section.slug, 'chapter_text_slug': self.slug})
+    
+    class Meta:
+        verbose_name = 'Глава'
+        verbose_name_plural = 'Главы'
+        ordering = ['name']
