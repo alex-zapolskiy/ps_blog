@@ -23,7 +23,7 @@ class Chapters(models.Model):
     text = models.TextField(blank=True)
     time_create = models.DateTimeField(auto_now_add=True)
     time_update = models.DateTimeField(auto_now=True)
-    section = models.ForeignKey('Sections', on_delete=models.PROTECT, related_name='chapter')
+    section = models.ForeignKey('Sections', on_delete=models.PROTECT, related_name='chapter', db_index=True)
     
     def __str__(self):
         return self.name

@@ -31,7 +31,7 @@ class ListChapters(ListSections):
 
     def get_queryset(self):
         section_slug = self.kwargs.get('section_slug')
-        return Chapters.objects.filter(section__slug=section_slug)
+        return Chapters.objects.filter(section__slug=section_slug).only('name', 'slug', 'section_id').select_related('section')
     
 
 class ChapterText(DetailView):
@@ -40,10 +40,23 @@ class ChapterText(DetailView):
     slug_url_kwarg = 'chapter_text_slug'
     context_object_name = 'chapter'
     
+    def get_object(self, queryset = None):
+        if queryset is None:
+            queryset = self.get_queryset()
+        section_slug = self.kwargs.get('section_slug')
+        chapter_slug = self.kwargs.get('chapter_text_slug')
+        
+        return queryset.filter(section__slug=section_slug,
+            slug=chapter_slug).only('name', 'slug', 'text', 'section_id'
+                                    ).select_related('section').get()
+        
+        
+    
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['title'] = context['chapter'].name
-        context['content'] = markdown2.markdown(context['chapter'].text)
+        chapter = self.object
+        context['title'] = chapter.name
+        context['content'] = markdown2.markdown(chapter.text)
         return context        
 
 
