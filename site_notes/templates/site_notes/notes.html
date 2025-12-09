@@ -1,8 +1,10 @@
 {% extends "base.html" %}
 {% block content%}
-<div style="padding-left: 30px;">
+<div style="simple-list">
     {% for s in content %}
-        <h2><a href="{{ s.get_absolute_url }}">{{ s }}</a></h2>
+    <div class="list-item">
+            <h2><a href="{{ s.get_absolute_url }}">{{ s }}</a></h2>
+    </div>
     {% endfor %}
 </div>
 {% endblock%}
