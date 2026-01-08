@@ -17,3 +17,13 @@ class AIChatForm(forms.Form):
     MODEL_CHOICES = get_list_models()
     model_ai = forms.ChoiceField(label='Модель ИИ', choices=MODEL_CHOICES)
     message = forms.CharField(label='Ваше сообщение', max_length=500)
+    
+
+class WeatherForm(forms.Form):
+    location = forms.CharField(label='Название города или населенного пункта',
+                               max_length=30,
+                               required=False
+                               )
+    num_days = forms.IntegerField(label='Количество дней',
+                                  required=False,
+                                  max_value=15)

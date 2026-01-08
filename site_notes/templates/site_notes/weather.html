@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+{% block content%}
+<div class="weather-widget">
+    <form class="weatherForm" method="get" >
+        {{ form.as_p}}
+        <button type="submit">Показать</button>
+    </form>
+    {% if error %}
+    <div class="error-message">
+        <h3>Ошибка</h3>
+        <p>{{ error }}</p>
+        <p>Попробуйте:</p>
+        <ul>
+            <li>Проверить правильность написания города</li>
+            <li>Использовать латинские буквы для международных городов</li>
+            <li>Попробовать позже, если проблема с сервером</li>
+        </ul>
+    </div>
+    {% endif %}
+    {% if weather %}
+    <h3>Прогноз погоды на {{ num_days }} дней в городе {{ location }}</h3>
+    <table class="weather-table">
+        <thead>
+            <tr>
+                <th>Дата</th>
+                <th>Описание</th>
+                <th>Макс.</th>
+                <th>Мин.</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for day in weather %}
+            <tr>
+                <td>{{ day.0 }}</td>
+                <td>{{ day.1 }}</td>
+                <td>{{ day.2 }}°C</td>
+                <td>{{ day.3 }}°C</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% endif %}
+</div>
+{% endblock %}

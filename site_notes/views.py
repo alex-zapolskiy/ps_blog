@@ -2,7 +2,7 @@ import os
 from django.http import HttpResponse, HttpResponseRedirect, StreamingHttpResponse
 from django.shortcuts import render
 from django.views.generic import ListView, DetailView
-from site_notes.forms import AIChatForm
+from site_notes.forms import AIChatForm, WeatherForm
 from site_notes.models import Chapters, Sections
 import json
 import requests
@@ -11,7 +11,91 @@ import markdown2
 
 def index(request):
     return render(request, 'site_notes/index.html')
+            
 
+def weather(request):
+    weather_data = None
+    error_message = None
+    location = None
+    num_days = None
+      
+    if request.method == 'GET':
+        form = WeatherForm(request.GET)
+        if form.is_valid():
+            location = form.cleaned_data['location']
+            num_days = form.cleaned_data['num_days']
+            
+            #Устанавливаем значения по умолчанию, если поля пустые
+            if not location:
+                location = 'Минск'
+                
+            if not num_days:
+                num_days = 7
+                
+            # Получаем данные о погоде
+            result = APIWeather(location, num_days)
+            
+            #Проверка на присутвствие ошибок
+            if 'error' in result:
+                error_message = result['error']
+            else:
+                weather_data = result['weather']
+            
+            return render(request, 'site_notes/weather.html', {
+                'weather': weather_data,
+                'error': error_message,
+                'location': location, 
+                'num_days': num_days,
+                'form': form
+            })
+        else:
+            form = WeatherForm(request.GET)
+    else:
+        form = WeatherForm()
+    
+    # return render(request, 'site_notes/weather.html', {
+    #     'weather': weather, 
+    #     'location': location, 
+    #     'num_days': num_days,
+    #     'form': form
+    # })
+    
+    
+def APIWeather(location, num_days):
+    API_KEY = os.getenv('WEATHER_API_KEY')
+    BASE_URL = 'https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline/'
+    
+    url = f'{BASE_URL}{location}'
+    
+    params = {
+    'key': API_KEY,
+    'unitGroup': 'metric',
+    'lang': 'ru',
+    'contentType': 'json'
+    }
+    
+    try:
+        responce = requests.get(url=url, params=params)
+        responce.raise_for_status()
+        
+        data = responce.json()
+        if 'days' not in data or not data['days']:
+            return {'error': 'Данные о погоде для указанного города не найдены'}
+        
+        result = [(day['datetime'], day['description'], day['tempmax'], day['tempmin']) for day in responce.json()['days'][:num_days]]
+        return {'weather': result}
+    
+    except requests.exceptions.HTTPError as http_err:
+        if responce.status_code == 400:
+            return {'error': 'Неверное название города. Пожалуйста, проверьте правильность ввода'}
+        elif responce.status_code == 401:
+            return {'error': 'Ошибка аутентификации API ключа'}
+        elif responce.status_code == 404:
+            return {'error': 'Город не найден. Пожалуйста, проверьте правильность названия'}
+        else:
+            return {'error': f'Ошибка при запросе погоды: {responce.status_code}'}
+        
+        
 class ListSections(ListView):
     model = Sections
     template_name = 'site_notes/notes.html'
