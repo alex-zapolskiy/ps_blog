@@ -10,7 +10,7 @@ import markdown2
 
 
 def index(request):
-    return render(request, 'site_notes/index.html')
+    return render(request, 'site_notes/index.html', {'title': 'Главная страница'})
             
 
 def weather(request):
@@ -46,7 +46,8 @@ def weather(request):
                 'error': error_message,
                 'location': location, 
                 'num_days': num_days,
-                'form': form
+                'form': form,
+                'title': 'Погода'
             })
         else:
             form = WeatherForm(request.GET)
@@ -145,7 +146,6 @@ class ChapterText(DetailView):
 
 
 def assistant(request):
-    
     if request.method == 'POST':
         form = AIChatForm(request.POST)
         if form.is_valid():
@@ -158,10 +158,10 @@ def assistant(request):
                     content_type='text/plain'
                 )
             
-            return render(request, 'site_notes/assistant.html', {'form': form})
+            return render(request, 'site_notes/assistant.html', {'form': form, 'title': 'AI Ассистент'})
     else:
         form = AIChatForm()
-    return render(request, 'site_notes/assistant.html', {'form': form})
+    return render(request, 'site_notes/assistant.html', {'form': form, 'title': 'AI Ассистент'})
 
 def contacts(request):
     return render(request, 'site_notes/contacts.html')

@@ -5,14 +5,16 @@
 </head>
 <body>
     
-    <form id="chatForm" method="post">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <button type="submit">Отправить</button>
-        <button type="button" id="stopButton" style="display: none;">Остановить</button>
-    </form>
+    <div class="form-container">
+        <form id="chatForm" method="post">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit" class="btn btn-primary">Отправить</button>
+            <button type="button" id="stopButton" class="btn btn-danger" style="display: none;">Остановить</button>
+        </form>
+    </div>
     
-    <div id="response" style="margin-top: 20px; padding: 10px; border: 1px solid #ccc; min-height: 100px;">
+    <div id="response" class="form-container" style="margin-top: 20px; min-height: 100px;">
         <!-- Ответ будет здесь -->
     </div>
 

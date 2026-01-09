@@ -1,9 +1,10 @@
 {% extends "base.html" %}
 {% block content%}
+<title>Погода</title>
 <div class="weather-widget">
-    <form class="weatherForm" method="get" >
+    <form class="form-container" method="get" >
         {{ form.as_p}}
-        <button type="submit">Показать</button>
+        <button type="submit" class="btn btn-primary">Показать</button>
     </form>
     {% if error %}
     <div class="error-message">
