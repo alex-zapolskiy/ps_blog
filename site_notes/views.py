@@ -1,6 +1,8 @@
 import os
+import re
 from django.http import HttpResponse, HttpResponseRedirect, StreamingHttpResponse
 from django.shortcuts import render
+from django.db.models import Q
 from django.views.generic import ListView, DetailView
 from site_notes.forms import AIChatForm, WeatherForm
 from site_notes.models import Chapters, Sections
@@ -103,21 +105,41 @@ class ListSections(ListView):
     context_object_name = 'content'
     
     def get_queryset(self):
-        return Sections.objects.all()
+        queryset = Sections.objects.all()
+        query = self.request.GET.get('search_sections')
+        if query:
+            safe_query = re.escape(query.strip())
+            queryset = Sections.objects.filter(name__iregex=safe_query)
+        return queryset
     
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['title'] = 'Конспекты'
+        context['form_text'] = 'Введите запрос на поиск по разделам'
+        context['search_query'] = self.request.GET.get('search_sections', '')
+        context['reset_url'] = self.get_reset_url()
         return context
 
+    def get_reset_url(self):
+        return self.request.path
 
 class ListChapters(ListSections):
     model = Chapters
 
     def get_queryset(self):
         section_slug = self.kwargs.get('section_slug')
-        return Chapters.objects.filter(section__slug=section_slug).only('name', 'slug', 'section_id').select_related('section')
+        queryset = Chapters.objects.filter(section__slug=section_slug).only('name', 'slug', 'section_id').select_related('section')
+        query = self.request.GET.get('search_sections')
+        if query:
+            safe_query = re.escape(query.strip())
+            queryset = query = Chapters.objects.filter(Q(section__slug=section_slug) & Q(name__iregex=safe_query)).only('name', 'slug', 'section_id').select_related('section')
+        return queryset
     
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['form_text'] = 'Введите запрос на поиск по главам'
+        context['search_query'] = self.request.GET.get('search_sections', '')
+        return context
 
 class ChapterText(DetailView):
     model = Chapters

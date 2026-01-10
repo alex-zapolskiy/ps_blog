@@ -1,10 +1,29 @@
 {% extends "base.html" %}
 {% block content%}
-<div style="simple-list">
-    {% for s in content %}
-    <div class="list-item">
+<div style="text-align: center;">
+    <form method="get">
+    <input type="search" name ="search_sections" class="form-container" placeholder="{{ form_text }}" value="{{ search_query }}">
+    <button type="submit" class="btn btn-primary">Поиск</button>
+    {% if search_query %}
+        <a href="{{ reset_url }}" class="btn btn-primary">Сбросить поиск</a>
+    {% endif %}
+    </form>
+</div>
+<div>
+    {% if content %}
+        {% for s in content %}
+        <div class="list-item">
             <h2><a href="{{ s.get_absolute_url }}">{{ s }}</a></h2>
-    </div>
-    {% endfor %}
+        </div>
+        {% endfor %}
+    {% else %}
+        <div class="alert-info">
+            {% if search_query %}
+                По запросу "{{ search_query }}" ничего не найдено.
+            {% else %}
+                Нет доступных глав.
+            {% endif %}
+        </div>
+    {% endif %}
 </div>
 {% endblock%}

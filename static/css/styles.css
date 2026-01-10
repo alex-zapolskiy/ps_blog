@@ -386,19 +386,31 @@ textarea.form-control {
 .btn-primary {
     background-color: var(--accent-color);
     color: white;
+    text-decoration: none;
 }
 
 .btn-primary:hover {
     background-color: #45a049;
+    text-decoration: none;
 }
 
 .btn-danger {
     background-color: var(--danger-color);
     color: white;
+    text-decoration: none;
 }
 
 .btn-danger:hover {
     background-color: #da190b;
+    text-decoration: none;
+}
+
+.alert-info {
+    padding: 12px 20px;
+    margin-top: 20px;
+    text-align: center;
+    font-size: 16px;
+    font-weight: 500;
 }
 
 /* ===== ПОСТЫ И СПИСКИ ===== */

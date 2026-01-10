@@ -26,4 +26,5 @@ class WeatherForm(forms.Form):
                                )
     num_days = forms.IntegerField(label='Количество дней',
                                   required=False,
+                                  min_value=1,
                                   max_value=15)
