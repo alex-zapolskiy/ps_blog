@@ -1,8 +1,11 @@
+from datetime import datetime
 import os
 import re
+from django.conf import settings
 from django.http import HttpResponse, HttpResponseRedirect, StreamingHttpResponse
 from django.shortcuts import render
 from django.db.models import Q
+from django.core.cache import cache
 from django.views.generic import ListView, DetailView
 from site_notes.forms import AIChatForm, WeatherForm
 from site_notes.models import Chapters, Sections
@@ -20,6 +23,7 @@ def weather(request):
     error_message = None
     location = None
     num_days = None
+    form = None
       
     if request.method == 'GET':
         form = WeatherForm(request.GET)
@@ -27,42 +31,62 @@ def weather(request):
             location = form.cleaned_data['location']
             num_days = form.cleaned_data['num_days']
             
-            #Устанавливаем значения по умолчанию, если поля пустые
-            if not location:
-                location = 'Минск'
-                
-            if not num_days:
-                num_days = 7
-                
-            # Получаем данные о погоде
-            result = APIWeather(location, num_days)
+            # Устанавливаем значения по умолчанию
+            location = location or 'Минск'
+            num_days = num_days or 7
             
-            #Проверка на присутвствие ошибок
-            if 'error' in result:
-                error_message = result['error']
-            else:
-                weather_data = result['weather']
+            # Создаем ключ для кэша
+            cache_key = f'weather:{location}:{num_days}'
             
-            return render(request, 'site_notes/weather.html', {
-                'weather': weather_data,
-                'error': error_message,
-                'location': location, 
-                'num_days': num_days,
-                'form': form,
-                'title': 'Погода'
-            })
-        else:
-            form = WeatherForm(request.GET)
-    else:
+            try:
+                # Пытаемся получить данные из кэша
+                cached_data = cache.get(cache_key)
+                
+                if cached_data:
+                    # Если данные есть в кэше, то десереализуем их
+                    weather_data = cached_data.get('weather_data')
+                    error_message = cached_data.get('error_message')
+                else:
+                    # Если нет в кэше, то получаем из API
+                    result = APIWeather(location, num_days)
+                                        
+                    if 'error' in result:
+                        error_message = result['error']
+                        cache_time = 300
+                    else:
+                        weather_data = result.get('weather')
+                        cache_time = getattr(settings, 'WEATHER_CACHE_TIMEOUT', 3600)
+                    
+                    # Кэшируем данные в Redis
+                    if weather_data or error_message:
+                        cache_data = {
+                            'weather_data': weather_data,
+                            'error_message': error_message,
+                            'cached_at': datetime.now().isoformat(),
+                            'location': location,
+                            'num_days': num_days
+                        }
+                        cache.set(cache_key, cache_data, cache_time)
+                        
+            except Exception as e:
+                # Пытаемся получить данные напрямую из API
+                result = APIWeather(location, num_days)
+                if 'error' in result:
+                    error_message = result['error']
+                else:
+                    weather_data = result.get('weather')
+    
+    if form is None:
         form = WeatherForm()
     
-    # return render(request, 'site_notes/weather.html', {
-    #     'weather': weather, 
-    #     'location': location, 
-    #     'num_days': num_days,
-    #     'form': form
-    # })
-    
+    return render(request, 'site_notes/weather.html', {
+        'weather': weather_data,
+        'error': error_message,
+        'location': location, 
+        'num_days': num_days,
+        'title': 'Погода',
+        'form': form
+    })
     
 def APIWeather(location, num_days):
     API_KEY = os.getenv('WEATHER_API_KEY')
@@ -98,7 +122,7 @@ def APIWeather(location, num_days):
         else:
             return {'error': f'Ошибка при запросе погоды: {responce.status_code}'}
         
-        
+                      
 class ListSections(ListView):
     model = Sections
     template_name = 'site_notes/notes.html'
