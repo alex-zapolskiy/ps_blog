@@ -15,6 +15,10 @@
         </header>
         
         <nav class="site-nav">
+            <ul style="justify-content: left;">
+                <li><a href="{% url 'registration' %}">Регистрация</a></li>
+                <li><a href="{% url 'authentication' %}">Вход</a></li>
+            </ul>
             <ul>
                 <li><a href="{% url 'home' %}">Главная</a></li>
                 <li><a href="{% url 'notes' %}">Конспекты по Django</a></li>
