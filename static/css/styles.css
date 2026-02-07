@@ -653,3 +653,26 @@ textarea.form-control {
 .main-content {
     padding-bottom: 150px;
 }
+.auth-footer {
+    margin-top: 25px;
+    padding: 15px;
+    text-align: center;
+    font-family: 'Inter', -apple-system, sans-serif;
+    font-size: 0.95rem;
+    color: #555;
+    border-radius: 10px;
+    border: 1px solid #eee;
+}
+.auth-link {
+    color: #4a90e2;
+    text-decoration: none;
+    font-weight: 600;
+    margin-left: 5px;
+    padding: 2px 4px;
+    transition: all 0.2s ease-in-out;
+}
+.auth-link:hover {
+    color: #2a64ad;
+    background-color: rgba(74, 144, 226, 0.1);
+    border-radius: 4px;
+}
