@@ -404,6 +404,32 @@ textarea.form-control {
     background-color: #da190b;
     text-decoration: none;
 }
+.btn-form-action {
+    background: transparent;
+    border: 2px solid transparent;
+    cursor: pointer;
+    display: block;
+    color: var(--white);
+    text-decoration: none;
+    padding: 10px 20px;
+    border-radius: 25px;
+    font-weight: 500;
+    font-family: Arial, sans-serif;
+    font-size: 16px;
+    transition: all 0.3s ease;
+    margin: 0 5px;
+}
+.btn-form-action:hover,
+.btn-form-action:focus {
+    background-color: rgba(255, 255, 255, 0.15);
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-light);
+    outline: none;
+}
+.btn-form-action:active {
+    transform: translateY(0);
+    filter: brightness(0.8);
+}
 
 .alert-info {
     padding: 12px 20px;
