@@ -1,4 +1,5 @@
 import os
+import re
 import requests
 from django import forms
 
@@ -28,3 +29,14 @@ class WeatherForm(forms.Form):
                                   required=False,
                                   min_value=1,
                                   max_value=15)
+    
+    def clean_location(self):
+        location = self.cleaned_data.get('location')
+        
+        if location:
+            if not re.match(r'^[a-zA-Zа-яА-ЯёЁ\s-]+$', location):
+                raise forms.ValidationError(
+                    "Название города может содержать только буквы, пробелы и дефисы."
+                )
+        
+        return location
