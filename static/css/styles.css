@@ -638,7 +638,89 @@ textarea.form-control {
     border-radius: 8px;
     box-shadow: var(--shadow-light);
 }
+/* ===== ЛИЧНЫЙ КАБИНЕТ ===== */
+.personal_account {
+    width: 80%;
+    max-width: 600px;
+    margin: 20px auto;
+    padding: 20px;
+    background: var(--white);
+    border-radius: 8px;
+    box-shadow: var(--shadow-light);
+}
 
+/* Стилизация блока с данными (аналог .post) */
+.personal_account .post {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+/* Заголовки полей (Label) */
+.personal_account h3 {
+    margin: 0 0 5px 0;
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text-color);
+    text-transform: uppercase; /* Делает заголовки более строгими */
+    letter-spacing: 0.5px;
+    opacity: 0.8;
+}
+
+/* Значения полей (аналог .form-control, но для текста) */
+.personal_account p {
+    margin: 0 0 15px 0;
+    padding: 12px;
+    background-color: var(--white);
+    border: 2px solid var(--border-color);
+    border-radius: 8px;
+    font-size: 16px;
+    color: var(--text-color);
+    font-family: Arial, sans-serif;
+    /* Имитация внешнего вида инпута, но без фокуса */
+    min-height: 48px;
+    display: flex;
+    align-items: center;
+}
+
+/* Последний элемент без нижнего отступа */
+.personal_account p:last-child {
+    margin-bottom: 0;
+}
+/* Контейнер для формы, чтобы кнопка не прилипала к тексту */
+.personal_account form {
+    margin-top: 25px;
+    padding-top: 15px;
+    border-top: 1px solid var(--border-color); /* Разделительная линия */
+}
+
+/* Стили основной кнопки */
+.btn-form-edit {
+    width: 100%;
+    padding: 14px;
+    background-color: var(--accent-color, #4CAF50); /* Зеленый по умолчанию, если переменная не задана */
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-family: Arial, sans-serif;
+    text-align: center;
+}
+
+/* Эффект при наведении */
+.btn-form-edit:hover {
+    filter: brightness(1.1); /* Легкое осветление */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    transform: translateY(-1px); /* Легкий подъем */
+}
+
+/* Эффект при нажатии */
+.btn-form-edit:active {
+    transform: translateY(0);
+}
 /* ===== ФУТЕР ===== */
 .site-footer {
     background: linear-gradient(135deg, var(--primary-color), #222);

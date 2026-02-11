@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% block content%}
+<h1 style="text-align: center;">Личный кабинет</h1>
+<div class="personal_account">
+        {% for field in user_fields %}
+            <h3>{{ field.label }}</h3>
+            <p>{{ field.value|default:"—" }}</p>
+        {% endfor %}
+</div>
+<!-- <form method="post" class="form-container">
+        {% csrf_token %}
+        <button type="submit" class="btn-form-edit">
+            Редактировать профиль
+        </button>
+</form> -->
+{% endblock %}
