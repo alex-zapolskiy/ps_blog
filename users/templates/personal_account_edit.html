@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% block content%}
+<form method="post" class="personal_account">
+    {% csrf_token %}
+    {% for field in form %}
+        <h3>{{ field.label }}</h3>
+        {% if field.errors%}
+
+            {{ field.errors}}
+
+        {% endif %}
+        
+        {{ field }}
+    
+    {% endfor %}
+    <button type="submit" class="btn-form-edit">
+            Сохранить изменения
+    </button>
+</form>
+{% endblock %}

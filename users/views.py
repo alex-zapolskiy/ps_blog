@@ -40,7 +40,7 @@ class UserLogout(LogoutView):
 class PersonalAccountView(LoginRequiredMixin, DetailView):
     model = User
     template_name = 'personal_account.html'
-    display_fields = ['username', 'email', 'first_name', 'last_name']
+    display_fields = ['username', 'email', 'first_name', 'last_name', 'birth_data']
 
     def get_object(self):
         return User.objects.only(*self.display_fields).get(pk=self.request.user.pk)
@@ -57,3 +57,15 @@ class PersonalAccountView(LoginRequiredMixin, DetailView):
              for name in self.display_fields
             ]
         return context
+    
+
+class PersonalAccountEditView(LoginRequiredMixin, UpdateView):
+    model = User
+    template_name = 'personal_account_edit.html'
+    fields = ['username', 'email', 'first_name', 'last_name', 'birth_data']
+
+    def get_object(self):
+        return self.request.user
+    
+    def get_success_url(self):
+        return reverse_lazy('account')
