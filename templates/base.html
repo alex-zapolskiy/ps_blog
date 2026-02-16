@@ -42,6 +42,13 @@
         </nav>
         
         <main class="main-content">
+            {% if messages %}
+                {% for message in messages %}
+                    <div class="message-success">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            {% endif %}
             {% autoescape off %}
             {% block content %}
             {% endblock %}
