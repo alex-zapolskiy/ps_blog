@@ -1,5 +1,5 @@
 from django.shortcuts import redirect, render
-from django.contrib.auth.views import LoginView, LogoutView
+from django.contrib.auth.views import LoginView, LogoutView, PasswordChangeView, PasswordChangeForm
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic import UpdateView, DetailView, TemplateView
 from django.http import HttpResponse
@@ -69,3 +69,11 @@ class PersonalAccountEditView(LoginRequiredMixin, UpdateView):
     
     def get_success_url(self):
         return reverse_lazy('account')
+    
+
+class MyPasswordChangeView(LoginRequiredMixin, PasswordChangeView):
+    template_name = 'password_edit.html'
+    form_class = PasswordChangeForm
+
+    def get_success_url(self):
+        return reverse_lazy('home')
