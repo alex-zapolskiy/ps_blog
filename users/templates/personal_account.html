@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% block content %}
+<h1 style="text-align: center;">Личный кабинет</h1>
+<div class="personal_account">
+        {% for field in user_fields %}
+            <h3>{{ field.label }}</h3>
+            <p>{{ field.value|default:"—" }}</p>
+        {% endfor %}
+    <a href="{% url 'account_edit' %}" class="btn-form-edit">
+            Редактировать профиль
+    </a>
+    <a href="{% url 'password_edit' %}" class="btn-form-edit">
+            Изменить пароль
+    </a>
+</div>
+{% endblock %}

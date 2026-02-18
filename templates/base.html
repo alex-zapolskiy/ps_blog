@@ -15,6 +15,22 @@
         </header>
         
         <nav class="site-nav">
+            {% if user.is_authenticated %}
+            <ul style="justify-content: left;">
+                <li><a href="{% url 'account' %}">{{ user.username }}</a></li>
+                <form method="post" action="{% url 'logout' %}">
+                    {% csrf_token %}
+                    <button type="submit" class="btn-form-action">
+                        Выйти
+                    </button>
+                </form>
+            </ul>
+            {% else %}
+            <ul style="justify-content: left;">
+                <li><a href="{% url 'registration' %}">Регистрация</a></li>
+                <li><a href="{% url 'login' %}">Вход</a></li>
+            </ul>
+            {% endif %}
             <ul>
                 <li><a href="{% url 'home' %}">Главная</a></li>
                 <li><a href="{% url 'notes' %}">Конспекты по Django</a></li>
@@ -26,6 +42,13 @@
         </nav>
         
         <main class="main-content">
+            {% if messages %}
+                {% for message in messages %}
+                    <div class="message-success">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            {% endif %}
             {% autoescape off %}
             {% block content %}
             {% endblock %}

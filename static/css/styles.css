@@ -404,6 +404,32 @@ textarea.form-control {
     background-color: #da190b;
     text-decoration: none;
 }
+.btn-form-action {
+    background: transparent;
+    border: 2px solid transparent;
+    cursor: pointer;
+    display: block;
+    color: var(--white);
+    text-decoration: none;
+    padding: 10px 20px;
+    border-radius: 25px;
+    font-weight: 500;
+    font-family: Arial, sans-serif;
+    font-size: 16px;
+    transition: all 0.3s ease;
+    margin: 0 5px;
+}
+.btn-form-action:hover,
+.btn-form-action:focus {
+    background-color: rgba(255, 255, 255, 0.15);
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-light);
+    outline: none;
+}
+.btn-form-action:active {
+    transform: translateY(0);
+    filter: brightness(0.8);
+}
 
 .alert-info {
     padding: 12px 20px;
@@ -612,7 +638,99 @@ textarea.form-control {
     border-radius: 8px;
     box-shadow: var(--shadow-light);
 }
+/* ===== ЛИЧНЫЙ КАБИНЕТ ===== */
+.personal_account {
+    width: 80%;
+    max-width: 600px;
+    margin: 20px auto;
+    padding: 25px;
+    background: var(--white);
+    border-radius: 8px;
+    box-shadow: var(--shadow-light);
+    display: flex;
+    flex-direction: column;
+}
 
+/* Заголовки полей */
+.personal_account h3 {
+    margin: 0 0 8px 0;
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text-color);
+    text-transform: uppercase;
+    opacity: 0.7;
+}
+.personal_account p {
+    margin: 0 0 15px 0;
+    padding: 12px;
+    background-color: var(--white);
+    border: 2px solid var(--border-color);
+    border-radius: 8px;
+    font-size: 16px;
+    color: var(--text-color);
+    min-height: 48px; /* Чтобы пустые поля не схлопывались */
+    display: flex;
+    align-items: center;
+    box-sizing: border-box;
+}
+.personal_account input {
+    width: 100%;
+    margin-bottom: 20px;
+    padding: 12px;
+    border: 2px solid var(--border-color);
+    border-radius: 8px;
+    font-size: 16px;
+    box-sizing: border-box;
+    transition: all 0.3s ease;
+}
+
+.personal_account input:focus {
+    outline: none;
+    border-color: var(--accent-color);
+    box-shadow: 0 0 5px rgba(76, 175, 80, 0.2);
+}
+.btn-form-edit {
+    width: 100%;
+    padding: 14px;
+    background-color: var(--accent-color, #4CAF50);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    margin-top: 10px;
+    text-align: center;
+    text-decoration: none;
+}
+.btn-form-cancel {
+    width: 100%;
+    padding: 14px;
+    background-color: var(--danger-color, #f44336);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    margin-top: 10px;
+    text-align: center;
+    text-decoration: none;
+}
+.message-success {
+    width: 80%;
+    max-width: 600px;
+    margin: 20px auto;
+    padding: 15px 25px;
+    background-color: #d4edda;
+    border: 2px solid #c3e6cb;
+    border-radius: 8px;
+    color: #155724;
+    font-size: 16px;
+    font-weight: 500;
+    text-align: center;
+    box-shadow: var(--shadow-light);
+}
 /* ===== ФУТЕР ===== */
 .site-footer {
     background: linear-gradient(135deg, var(--primary-color), #222);
@@ -652,4 +770,27 @@ textarea.form-control {
 /* Добавляем отступ для основного контента, чтобы он не перекрывался футером */
 .main-content {
     padding-bottom: 150px;
+}
+.auth-footer {
+    margin-top: 25px;
+    padding: 15px;
+    text-align: center;
+    font-family: 'Inter', -apple-system, sans-serif;
+    font-size: 0.95rem;
+    color: #555;
+    border-radius: 10px;
+    border: 1px solid #eee;
+}
+.auth-link {
+    color: #4a90e2;
+    text-decoration: none;
+    font-weight: 600;
+    margin-left: 5px;
+    padding: 2px 4px;
+    transition: all 0.2s ease-in-out;
+}
+.auth-link:hover {
+    color: #2a64ad;
+    background-color: rgba(74, 144, 226, 0.1);
+    border-radius: 4px;
 }
