@@ -15,7 +15,7 @@ def registration(request):
         form = UserForm(request.POST)
         if form.is_valid():
             form.save()
-            return redirect('home')
+            return redirect('users:login')
     else:
         form = UserForm()
     return render(request, 'registation.html', {'form': form, 'title': 'Регистация'})
@@ -26,7 +26,7 @@ class UserLogin(LoginView):
     redirect_authenticated_user = True
 
     def get_success_url(self):
-        return reverse_lazy('home')
+        return reverse_lazy('site_notes:home')
     
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -36,7 +36,7 @@ class UserLogin(LoginView):
 
 class UserLogout(LogoutView):
     # Указываем, куда перенаправить пользователя после выхода
-    next_page = reverse_lazy('login')
+    next_page = reverse_lazy('users:login')
 
     def dispatch(self, request, *args, **kwargs):
         messages.success(request, 'Вы успешно вышли из аккаунта!')
@@ -82,7 +82,7 @@ class PersonalAccountEditView(LoginRequiredMixin, UpdateView):
         return self.request.user
     
     def get_success_url(self):
-        return reverse_lazy('account')
+        return reverse_lazy('users:account')
     
     def form_valid(self, form):
         responce = super().form_valid(form)
@@ -102,4 +102,4 @@ class MyPasswordChangeView(LoginRequiredMixin, SuccessMessageMixin, PasswordChan
     success_message = 'Пароль успешно изменен!'
 
     def get_success_url(self):
-        return reverse_lazy('account')
+        return reverse_lazy('users:account')
