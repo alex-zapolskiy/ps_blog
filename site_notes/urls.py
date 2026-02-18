@@ -1,6 +1,8 @@
 from django.urls import path
 from site_notes import views
 
+app_name = 'site_notes'
+
 urlpatterns = [
     path('', views.index, name='home'),
     path('notes/', views.ListSections.as_view(), name='notes'),

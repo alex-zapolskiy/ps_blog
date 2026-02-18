@@ -9,7 +9,7 @@ class Sections(models.Model):
         return self.name
     
     def get_absolute_url(self):
-        return reverse('list_chapters', kwargs={'section_slug': self.slug})
+        return reverse('site_notes:list_chapters', kwargs={'section_slug': self.slug})
     
     class Meta:
         verbose_name = 'Раздел'
@@ -29,7 +29,7 @@ class Chapters(models.Model):
         return self.name
     
     def get_absolute_url(self):
-        return reverse('chapter_text', kwargs={'section_slug': self.section.slug, 'chapter_text_slug': self.slug})
+        return reverse('site_notes:chapter_text', kwargs={'section_slug': self.section.slug, 'chapter_text_slug': self.slug})
     
     class Meta:
         verbose_name = 'Глава'

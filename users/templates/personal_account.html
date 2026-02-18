@@ -6,10 +6,10 @@
             <h3>{{ field.label }}</h3>
             <p>{{ field.value|default:"—" }}</p>
         {% endfor %}
-    <a href="{% url 'account_edit' %}" class="btn-form-edit">
+    <a href="{% url 'users:account_edit' %}" class="btn-form-edit">
             Редактировать профиль
     </a>
-    <a href="{% url 'password_edit' %}" class="btn-form-edit">
+    <a href="{% url 'users:password_edit' %}" class="btn-form-edit">
             Изменить пароль
     </a>
 </div>

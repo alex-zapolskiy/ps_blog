@@ -5,6 +5,6 @@
         {{ form.as_p}}
         <button type="submit" class="btn btn-primary">Войти</button>
     <p class="auth-footer">
-        Нет аккаунта? <a href="{% url 'registration' %}" class="auth-link">Зарегистрироваться</a>
+        Нет аккаунта? <a href="{% url 'users:registration' %}" class="auth-link">Зарегистрироваться</a>
     </p>
 {% endblock %}

@@ -17,8 +17,8 @@
         <nav class="site-nav">
             {% if user.is_authenticated %}
             <ul style="justify-content: left;">
-                <li><a href="{% url 'account' %}">{{ user.username }}</a></li>
-                <form method="post" action="{% url 'logout' %}">
+                <li><a href="{% url 'users:account' %}">{{ user.username }}</a></li>
+                <form method="post" action="{% url 'users:logout' %}">
                     {% csrf_token %}
                     <button type="submit" class="btn-form-action">
                         Выйти
@@ -27,17 +27,17 @@
             </ul>
             {% else %}
             <ul style="justify-content: left;">
-                <li><a href="{% url 'registration' %}">Регистрация</a></li>
-                <li><a href="{% url 'login' %}">Вход</a></li>
+                <li><a href="{% url 'users:registration' %}">Регистрация</a></li>
+                <li><a href="{% url 'users:login' %}">Вход</a></li>
             </ul>
             {% endif %}
             <ul>
-                <li><a href="{% url 'home' %}">Главная</a></li>
-                <li><a href="{% url 'notes' %}">Конспекты по Django</a></li>
-                <li><a href="{% url 'assistant' %}">Ассистент</a></li>
-                <li><a href="{% url 'weather' %}">Погода</a></li>
-                <li><a href="{% url 'contacts' %}">Контакты</a></li>
-                <li><a href="{% url 'about' %}">О сайте</a></li>
+                <li><a href="{% url 'site_notes:home' %}">Главная</a></li>
+                <li><a href="{% url 'site_notes:notes' %}">Конспекты по Django</a></li>
+                <li><a href="{% url 'site_notes:assistant' %}">Ассистент</a></li>
+                <li><a href="{% url 'site_notes:weather' %}">Погода</a></li>
+                <li><a href="{% url 'site_notes:contacts' %}">Контакты</a></li>
+                <li><a href="{% url 'site_notes:about' %}">О сайте</a></li>
             </ul>
         </nav>
         
