@@ -8,7 +8,7 @@ from django.db.models import Q
 from django.core.cache import cache
 from django.views.generic import ListView, DetailView
 from site_notes.forms import AIChatForm, WeatherForm
-from site_notes.models import Chapters, Sections
+from site_notes.models import AIChatMessage, Chapters, Sections
 import json
 import requests
 import markdown2
@@ -192,22 +192,35 @@ class ChapterText(DetailView):
 
 
 def assistant(request):
+    history = []
+    user = request.user
+    if user.is_authenticated:
+        history = AIChatMessage.objects.filter(user=user)[:5]
     if request.method == 'POST':
         form = AIChatForm(request.POST)
         if form.is_valid():
             #получаем "чистые" данные из формы
             message = form.cleaned_data['message']
             model_ai = form.cleaned_data['model_ai']
+
+            if user.is_authenticated:
+                AIChatMessage.objects.create(
+                    user = user,
+                    query = message,
+                    responce = '',
+                    model_AI = model_ai,
+
+                )
             if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
                 return StreamingHttpResponse(
                     AIRequest(message, model_ai), 
                     content_type='text/plain'
                 )
             
-            return render(request, 'site_notes/assistant.html', {'form': form, 'title': 'AI Ассистент'})
+            return render(request, 'site_notes/assistant.html', {'form': form, 'title': 'AI Ассистент', 'history': history})
     else:
         form = AIChatForm()
-    return render(request, 'site_notes/assistant.html', {'form': form, 'title': 'AI Ассистент'})
+    return render(request, 'site_notes/assistant.html', {'form': form, 'title': 'AI Ассистент', 'history': history})
 
 def contacts(request):
     return render(request, 'site_notes/contacts.html')

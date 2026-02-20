@@ -1,5 +1,6 @@
 from django.db import models
 from django.urls import reverse
+from users.models import User
 
 class Sections(models.Model):
     name = models.CharField(max_length=30, )
@@ -35,3 +36,11 @@ class Chapters(models.Model):
         verbose_name = 'Глава'
         verbose_name_plural = 'Главы'
         ordering = ['name']
+
+
+class AIChatMessage(models.Model):
+    user = models.ForeignKey('users.User', on_delete=models.CASCADE, related_name='ai_message')
+    query = models.TextField(verbose_name='Запрос пользователя')
+    responce = models.TextField(blank=True, null=True, verbose_name='Ответ ИИ')
+    model_AI = models.CharField(blank=False, default='deepseek-ai/DeepSeek-R1-0528', verbose_name='Модель ИИ')
+    time_create = models.DateTimeField(auto_now_add=True, verbose_name='Дата запроса')

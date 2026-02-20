@@ -13,7 +13,19 @@
             <button type="button" id="stopButton" class="btn btn-danger" style="display: none;">Остановить</button>
         </form>
     </div>
-    
+    {% if history %}
+    <div>
+        {% for item in history %}
+            <div>
+                <p>{{item.model_AI}}</p>
+                <p>{{ item.query }}</p>
+                <p>{{ item.time_create}}</p>
+            </div>
+        {% endfor %}
+    {% else%}
+    <p>История пока пуста</p>
+    </div>
+    {% endif %}
     <div id="response" class="form-container" style="margin-top: 20px; min-height: 100px;">
         <!-- Ответ будет здесь -->
     </div>
