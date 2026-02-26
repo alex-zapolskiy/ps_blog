@@ -241,14 +241,69 @@ body, html {
 /* ===== ФОРМЫ (ОБЩИЕ СТИЛИ) ===== */
 .form-container {
     width: 80%;
-    max-width: 600px;
+    max-width: 800px;
     margin: 20px auto;
     padding: 20px;
     background: var(--white);
     border-radius: 8px;
     box-shadow: var(--shadow-light);
 }
+.main-layout {
+    display: flex;
+    gap: 20px;
+    max-width: 1400px;
+    margin: 20px auto;
 
+}
+.history-container {
+    width: 350px;
+    flex-shrink: 0;
+    background: var(--white);
+    border-radius: 8px;
+    box-shadow: var(--shadow-light);
+    padding: 20px;
+    top: 20px;
+}
+.history-container h3 {
+    margin: 0 0 20px 0;
+    padding-bottom: 10px;
+    color: #2c3e50;
+    font-size: 1.3em;
+    font-weight: 600;
+    border-bottom: 2px solid #3498db;
+}
+.history-container h3::before {
+    content: "📋 ";
+    margin-right: 5px;
+}
+.history-container a {
+    padding: 15px;
+    text-decoration: none;
+    color: #2c3e50;
+    display: block;
+}
+.history-container a:hover {
+    background-color: #afcced;
+    color: #2980b9;
+}
+
+.history-container p {
+    margin: 4px 0 12px 12px;
+    color: #7f8c8d;
+    font-size: 0.85em;
+    font-family: 'Segoe UI';
+}
+.history-container p:last-of-type {
+    border-bottom: none;
+}
+.form-container-assistant {
+    width: 100%;
+    width: 700px;
+    padding: 20px;
+    background: var(--white);
+    border-radius: 8px;
+    box-shadow: var(--shadow-light);
+}
 .form-group {
     margin-bottom: 20px;
 }
@@ -284,12 +339,12 @@ textarea.form-control {
 }
 
 /* Стили для полей ввода, которые генерируются form.as_p */
-.form-container p {
+.form-container p, .form-container-assistant p {
     margin: 0 0 20px 0;
     padding: 0;
 }
 
-.form-container label {
+.form-container label, .form-container-assistant label {
     display: block;
     margin-bottom: 8px;
     font-weight: 600;
@@ -300,7 +355,9 @@ textarea.form-control {
 .form-container input[type="password"],
 .form-container input[type="number"],
 .form-container input[type="url"],
-.form-container select {
+.form-container select,
+.form-container-assistant select,
+.form-container-assistant input[type="text"] {
     width: 100%;
     padding: 12px;
     border: 2px solid var(--border-color);
@@ -312,7 +369,7 @@ textarea.form-control {
     background-color: var(--white);
     color: var(--text-color);
 }
-.form-container textarea {
+.form-container textarea, .form-container-assistant textarea {
     width: 100%;
     padding: 12px;
     border: 2px solid var(--border-color);

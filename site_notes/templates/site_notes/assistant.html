@@ -4,20 +4,45 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
 <body>
-    
-    <div class="form-container">
-        <form id="chatForm" method="post">
-            {% csrf_token %}
-            {{ form.as_p }}
-            <button type="submit" class="btn btn-primary">Отправить</button>
-            <button type="button" id="stopButton" class="btn btn-danger" style="display: none;">Остановить</button>
-        </form>
-    </div>
-    
-    <div id="response" class="form-container" style="margin-top: 20px; min-height: 100px;">
-        <!-- Ответ будет здесь -->
-    </div>
+    <div class="main-layout">
+        <!-- Блок истории слева -->
+        <div class="history-sidebar">
+            <div class="history-container">
+                <h3>История запросов</h3>
+                {% if history %}
+                    {% for item in history %}
+                        <a href="?history_record={{ item.public_id }}"">{{ item.query|truncatechars:25 }}</a>
+                        <p>Модель: {{ item.model_after_slash }}</p>
+                        <p>{{ item.time_create }}</p>
+                    {% endfor %}
+                {% elif user.is_authenticated %}
+                    <p>История пока пуста</p>
+                {% else %}
+                    <p> Войдите, чтобы увидить историю запросов</p>
+                {% endif %}
+            </div>
+        </div>
+        <div class="main-content">
+            <div class="form-container-assistant">
+                <form id="chatForm" method="post">
+                    {% csrf_token %}
+                    {{ form.as_p }}
+                    <button type="submit" class="btn btn-primary">Отправить</button>
+                    <button type="button" id="stopButton" class="btn btn-danger" style="display: none;">Остановить</button>
+                </form>
+            </div>
 
+            <div id="response" class="form-container-assistant" style="margin-top: 20px; min-height: 100px;">
+                <!-- Ответ будет здесь -->
+            </div>
+        </div>
+    </div>
+    <!-- Отображение истории -->
+    {% if loaded_response %}
+    <script>
+        document.getElementById('response').innerHTML = '{{ loaded_response }}'
+    </script>
+    {% endif %}
 <script>
     $(document).ready(function() {
         var xhr = null;
