@@ -2,13 +2,14 @@ from datetime import datetime
 import os
 import re
 from django.conf import settings
-from django.http import HttpResponse, HttpResponseRedirect, StreamingHttpResponse
+from django.http import HttpResponse, HttpResponseRedirect, JsonResponse, StreamingHttpResponse
 from django.shortcuts import render
 from django.db.models import Q
 from django.core.cache import cache
-from django.views.generic import ListView, DetailView
+from django.urls import reverse_lazy
+from django.views.generic import FormView, ListView, DetailView
 from site_notes.forms import AIChatForm, WeatherForm
-from site_notes.models import Chapters, Sections
+from site_notes.models import Chapters, ChatMessage, Sections
 import json
 import requests
 import markdown2
@@ -190,24 +191,83 @@ class ChapterText(DetailView):
         context['content'] = markdown2.markdown(chapter.text)
         return context        
 
+class AssistantFormView(FormView):
+    template_name = 'site_notes/assistant.html'
+    form_class = AIChatForm
 
-def assistant(request):
-    if request.method == 'POST':
-        form = AIChatForm(request.POST)
-        if form.is_valid():
-            #получаем "чистые" данные из формы
-            message = form.cleaned_data['message']
-            model_ai = form.cleaned_data['model_ai']
-            if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
-                return StreamingHttpResponse(
-                    AIRequest(message, model_ai), 
-                    content_type='text/plain'
-                )
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        user = self.request.user
+        
+        # Обработка GET-параметра history_record
+        history_record = self.request.GET.get('history_record')
+        if history_record and user.is_authenticated:
+            history_item = ChatMessage.objects.get(public_id=history_record, user=user)
+            kwargs['initial'] = {
+                'message': history_item.query,
+                'model_ai': history_item.model_AI
+            }
+            self.loaded_response = history_item.response
+        else:
+            self.loaded_response = None
             
-            return render(request, 'site_notes/assistant.html', {'form': form, 'title': 'AI Ассистент'})
-    else:
-        form = AIChatForm()
-    return render(request, 'site_notes/assistant.html', {'form': form, 'title': 'AI Ассистент'})
+        return kwargs
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        user = self.request.user
+        
+        # История сообщений
+        if user.is_authenticated:
+            context['history'] = ChatMessage.objects.filter(user=user)[:5]
+        else:
+            context['history'] = None
+            
+        context['title'] = 'AI Ассистент'
+        context['loaded_response'] = getattr(self, 'loaded_response', None)
+        
+        return context
+    
+    def form_valid(self, form):
+        user = self.request.user
+        message = form.cleaned_data['message']
+        model_ai = form.cleaned_data['model_ai']
+        
+        # Создание записи в БД для авторизованных пользователей
+        chat_obj = None
+        if user.is_authenticated:
+            chat_obj = ChatMessage.objects.create(
+                query=message,
+                response='',
+                model_AI=model_ai,
+                user=user
+            )
+        
+        if self.request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+            return self.stream_response(message, model_ai, chat_obj)
+        
+        return super().form_valid(form)
+    
+    def stream_response(self, message, model_ai, chat_obj):
+        def stream_and_save():
+            full_response = ''
+            for chunk in AIRequest(message, model_ai):
+                full_response += chunk
+                yield chunk
+            if chat_obj:
+                chat_obj.response = full_response
+                chat_obj.save()
+        
+        return StreamingHttpResponse(
+            stream_and_save(),
+            content_type='text/plain'
+        )
+    
+    def form_invalid(self, form):
+        if self.request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+            return JsonResponse({'error': 'Invalid form'}, status=400)
+        return super().form_invalid(form)
+    
 
 def contacts(request):
     return render(request, 'site_notes/contacts.html')

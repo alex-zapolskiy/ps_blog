@@ -17,7 +17,15 @@ class AIChatForm(forms.Form):
     
     MODEL_CHOICES = get_list_models()
     model_ai = forms.ChoiceField(label='Модель ИИ', choices=MODEL_CHOICES)
-    message = forms.CharField(label='Ваше сообщение', max_length=500)
+    message = forms.CharField(
+        label='Ваше сообщение',
+        max_length=500,
+        widget=forms.Textarea(attrs={
+            'placeholder': 'Введите ваш вопрос здесь...',
+            'rows': 3,
+            'style': 'resize: none;'
+            })
+        )
     
 
 class WeatherForm(forms.Form):
