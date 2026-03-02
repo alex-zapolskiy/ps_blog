@@ -10,6 +10,8 @@ from django.urls import reverse_lazy
 from django.views.generic import FormView, ListView, DetailView
 from site_notes.forms import AIChatForm, WeatherForm
 from site_notes.models import Chapters, ChatMessage, Sections
+from site_notes.constants.promts import SYSTEM_PROMPTS, PROMPT_DESCRIPTIONS
+from site_notes.utils import render_markdown
 import json
 import requests
 import markdown2
@@ -205,7 +207,8 @@ class AssistantFormView(FormView):
             history_item = ChatMessage.objects.get(public_id=history_record, user=user)
             kwargs['initial'] = {
                 'message': history_item.query,
-                'model_ai': history_item.model_AI
+                'model_ai': history_item.model_AI,
+                'prompt': history_item.prompt,
             }
             self.loaded_response = history_item.response
         else:
@@ -225,13 +228,13 @@ class AssistantFormView(FormView):
             
         context['title'] = 'AI Ассистент'
         context['loaded_response'] = getattr(self, 'loaded_response', None)
-        
         return context
     
     def form_valid(self, form):
         user = self.request.user
         message = form.cleaned_data['message']
         model_ai = form.cleaned_data['model_ai']
+        prompt = form.cleaned_data['prompt']
         
         # Создание записи в БД для авторизованных пользователей
         chat_obj = None
@@ -240,34 +243,35 @@ class AssistantFormView(FormView):
                 query=message,
                 response='',
                 model_AI=model_ai,
+                prompt = PROMPT_DESCRIPTIONS[prompt],
                 user=user
             )
         
         if self.request.headers.get('X-Requested-With') == 'XMLHttpRequest':
-            return self.stream_response(message, model_ai, chat_obj)
+            return self.stream_response(message, model_ai, prompt, chat_obj)
         
         return super().form_valid(form)
     
-    def stream_response(self, message, model_ai, chat_obj):
+    def stream_response(self, message, model_ai, prompt, chat_obj):
         def stream_and_save():
             full_response = ''
-            for chunk in AIRequest(message, model_ai):
+            for chunk in AIRequest(message, model_ai, prompt):
                 full_response += chunk
                 yield chunk
             if chat_obj:
-                chat_obj.response = full_response
+                chat_obj.response = render_markdown(full_response)
                 chat_obj.save()
         
         return StreamingHttpResponse(
             stream_and_save(),
-            content_type='text/plain'
+            content_type='text/markdown'
         )
     
     def form_invalid(self, form):
         if self.request.headers.get('X-Requested-With') == 'XMLHttpRequest':
             return JsonResponse({'error': 'Invalid form'}, status=400)
         return super().form_invalid(form)
-    
+
 
 def contacts(request):
     return render(request, 'site_notes/contacts.html')
@@ -275,21 +279,19 @@ def contacts(request):
 def about(request):
     return render(request, 'site_notes/about.html')
 
-def AIRequest(user_input=None, model_ai=None):
+def AIRequest(user_input=None, model_ai=None, prompt=None):
     #запрос к ИИ
     url = 'https://api.intelligence.io.solutions/api/v1/chat/completions'
 
     headers = {'Authorization': os.getenv('AI_KEY')}
     model_ai =  model_ai if model_ai else 'deepseek-ai/DeepSeek-R1-0528'
+    prompt = prompt if prompt else SYSTEM_PROMPTS['writer']
     user_content = user_input
     
     data = {
         'model': model_ai,
         'messages': [
-            {
-                'role': 'system',
-                'content': 'You\'re a helpful assistant. Answer briefly and to the point, without wasting time thinking out loud.'
-            },
+            SYSTEM_PROMPTS[prompt],
             {
                 'role': 'user',
                 'content': user_content

@@ -13,6 +13,7 @@
                     {% for item in history %}
                         <a href="?history_record={{ item.public_id }}"">{{ item.query|truncatechars:25 }}</a>
                         <p>Модель: {{ item.model_after_slash }}</p>
+                        <p>Роль: {{ item.prompt }}</p>
                         <p>{{ item.time_create }}</p>
                     {% endfor %}
                 {% elif user.is_authenticated %}
@@ -40,7 +41,7 @@
     <!-- Отображение истории -->
     {% if loaded_response %}
     <script>
-        document.getElementById('response').innerHTML = '{{ loaded_response }}'
+        document.getElementById('response').innerHTML = '{{ loaded_response|escapejs }}'
     </script>
     {% endif %}
 <script>

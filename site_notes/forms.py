@@ -2,6 +2,7 @@ import os
 import re
 import requests
 from django import forms
+from site_notes.constants.promts import PROMPT_DESCRIPTIONS
 
 class AIChatForm(forms.Form):
     
@@ -17,6 +18,7 @@ class AIChatForm(forms.Form):
     
     MODEL_CHOICES = get_list_models()
     model_ai = forms.ChoiceField(label='Модель ИИ', choices=MODEL_CHOICES)
+    prompt = forms.ChoiceField(label='Роль', choices=PROMPT_DESCRIPTIONS)
     message = forms.CharField(
         label='Ваше сообщение',
         max_length=500,

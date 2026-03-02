@@ -1,8 +1,8 @@
 import uuid
-
 from django.conf import settings
 from django.db import models
 from django.urls import reverse
+from site_notes.constants.promts import PROMPT_DESCRIPTIONS
 
 class Sections(models.Model):
     name = models.CharField(max_length=30, )
@@ -45,6 +45,7 @@ class ChatMessage(models.Model):
         query = models.TextField(verbose_name='Запрос пользователя')
         response = models.TextField(blank=True, null=True, verbose_name='Ответ ИИ')
         model_AI = models.CharField(default='deepseek-ai/DeepSeek-R1-0528', verbose_name='Модель ИИ')
+        prompt = models.CharField(verbose_name='Роль модели')
         time_create = models.DateTimeField(auto_now_add=True, verbose_name='Дата запроса')
         user = models.ForeignKey(to= settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='ai_messages')
 
