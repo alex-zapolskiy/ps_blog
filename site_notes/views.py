@@ -1,20 +1,16 @@
-from datetime import datetime
-import os
 import re
 from django.conf import settings
-from django.http import HttpResponse, HttpResponseRedirect, JsonResponse, StreamingHttpResponse
+from django.http import JsonResponse, StreamingHttpResponse
 from django.shortcuts import render
 from django.db.models import Q
 from django.core.cache import cache
-from django.urls import reverse_lazy
 from django.views.generic import FormView, ListView, DetailView
-from site_notes.forms import AIChatForm, WeatherForm
-from site_notes.models import Chapters, ChatMessage, Sections
-from site_notes.constants.promts import SYSTEM_PROMPTS, PROMPT_DESCRIPTIONS
-from site_notes.utils import render_markdown
-import json
-import requests
+from .forms import AIChatForm, WeatherForm
+from .models import Chapters, ChatMessage, Sections
+from .constants.promts import PROMPT_DESCRIPTIONS
+from .utils import render_markdown
 import markdown2
+from .api import APIWeather, APIAIRequest
 
 
 def index(request):
@@ -41,43 +37,37 @@ def weather(request):
             # Создаем ключ для кэша
             cache_key = f'weather:{location}:{num_days}'
             
+            # Пытаемся получить данные из кэша
             try:
-                # Пытаемся получить данные из кэша
                 cached_data = cache.get(cache_key)
+            except Exception:
+                cached_data = None
+            
+            if cached_data:
+                weather_data = cached_data.get('weather_data')
+                error_message = cached_data.get('error_message')
+            else:
+                result = APIWeather(location, num_days)
                 
-                if cached_data:
-                    # Если данные есть в кэше, то десереализуем их
-                    weather_data = cached_data.get('weather_data')
-                    error_message = cached_data.get('error_message')
+                if 'error' in result:
+                    error_message = result['error']
+                    cache_time = 300
                 else:
-                    # Если нет в кэше, то получаем из API
-                    result = APIWeather(location, num_days)
-                                        
-                    if 'error' in result:
-                        error_message = result['error']
-                        cache_time = 300
-                    else:
-                        weather_data = result.get('weather')
-                        cache_time = getattr(settings, 'WEATHER_CACHE_TIMEOUT', 3600)
-                    
-                    # Кэшируем данные в Redis
-                    if weather_data or error_message:
+                    weather_data = result.get('weather')
+                    cache_time = getattr(settings, 'WEATHER_CACHE_TIMEOUT', 3600)
+                
+                # Кэшируем результат
+                if (weather_data or error_message) and cache_time:
+                    try:
                         cache_data = {
                             'weather_data': weather_data,
                             'error_message': error_message,
-                            'cached_at': datetime.now().isoformat(),
-                            'location': location,
-                            'num_days': num_days
                         }
                         cache.set(cache_key, cache_data, cache_time)
-                        
-            except Exception as e:
-                # Пытаемся получить данные напрямую из API
-                result = APIWeather(location, num_days)
-                if 'error' in result:
-                    error_message = result['error']
-                else:
-                    weather_data = result.get('weather')
+                    except Exception:
+                        pass
+    else:
+        form = WeatherForm()
     
     if form is None:
         form = WeatherForm()
@@ -90,40 +80,6 @@ def weather(request):
         'title': 'Погода',
         'form': form
     })
-    
-def APIWeather(location, num_days):
-    API_KEY = os.getenv('WEATHER_API_KEY')
-    BASE_URL = 'https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline/'
-    
-    url = f'{BASE_URL}{location}'
-    
-    params = {
-    'key': API_KEY,
-    'unitGroup': 'metric',
-    'lang': 'ru',
-    'contentType': 'json'
-    }
-    
-    try:
-        responce = requests.get(url=url, params=params)
-        responce.raise_for_status()
-        
-        data = responce.json()
-        if 'days' not in data or not data['days']:
-            return {'error': 'Данные о погоде для указанного города не найдены'}
-        
-        result = [(day['datetime'], day['description'], day['tempmax'], day['tempmin']) for day in responce.json()['days'][:num_days]]
-        return {'weather': result}
-    
-    except requests.exceptions.HTTPError as http_err:
-        if responce.status_code == 400:
-            return {'error': 'Неверное название города. Пожалуйста, проверьте правильность ввода'}
-        elif responce.status_code == 401:
-            return {'error': 'Ошибка аутентификации API ключа'}
-        elif responce.status_code == 404:
-            return {'error': 'Город не найден. Пожалуйста, проверьте правильность названия'}
-        else:
-            return {'error': f'Ошибка при запросе погоды: {responce.status_code}'}
         
                       
 class ListSections(ListView):
@@ -255,7 +211,7 @@ class AssistantFormView(FormView):
     def stream_response(self, message, model_ai, prompt, chat_obj):
         def stream_and_save():
             full_response = ''
-            for chunk in AIRequest(message, model_ai, prompt):
+            for chunk in APIAIRequest(message, model_ai, prompt):
                 full_response += chunk
                 yield chunk
             if chat_obj:
@@ -278,50 +234,3 @@ def contacts(request):
 
 def about(request):
     return render(request, 'site_notes/about.html')
-
-def AIRequest(user_input=None, model_ai=None, prompt=None):
-    #запрос к ИИ
-    url = 'https://api.intelligence.io.solutions/api/v1/chat/completions'
-
-    headers = {'Authorization': os.getenv('AI_KEY')}
-    model_ai =  model_ai if model_ai else 'deepseek-ai/DeepSeek-R1-0528'
-    prompt = prompt if prompt else SYSTEM_PROMPTS['writer']
-    user_content = user_input
-    
-    data = {
-        'model': model_ai,
-        'messages': [
-            SYSTEM_PROMPTS[prompt],
-            {
-                'role': 'user',
-                'content': user_content
-            }
-        ],
-        'stream': True
-    }
-    
-    response = requests.post(url, headers=headers, json=data, stream=True)
-    #обработка ответа и парсинг json
-    if response.status_code == 200:
-        for line in response.iter_lines(decode_unicode=True):
-            if line:
-                if line.startswith('data: '):
-                    chunk_data = line[6:]
-
-                    if chunk_data == '[DONE]':
-                        break
-                    
-                    try:
-                        chunk_json = json.loads(chunk_data)
-                        if 'choices' in chunk_json and len(chunk_json['choices']) > 0:
-                            choice = chunk_json['choices'][0]
-                            if 'delta' in choice and 'content' in choice['delta']:
-                                content = choice['delta']['content']
-                                yield content
-                    
-                    except json.JSONDecodeError:
-                        continue
-                    except (KeyError, IndexError):
-                        continue
-    else:
-        yield f'Ошибка: HTTP {response.status_code}'
