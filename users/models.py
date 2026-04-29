@@ -3,5 +3,5 @@ from django.contrib.auth.models import AbstractUser
 
 
 class User(AbstractUser):
-    email = models.EmailField(max_length=50, blank=True, unique=True)
-    birth_data = models.DateField(blank=True, null=True, verbose_name='Дата рождения')
+    email = models.EmailField(max_length=254, blank=True, unique=True)
+    birth_date = models.DateField(blank=True, null=True, verbose_name='Дата рождения')

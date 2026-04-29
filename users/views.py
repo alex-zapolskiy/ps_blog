@@ -15,10 +15,11 @@ def registration(request):
         form = UserForm(request.POST)
         if form.is_valid():
             form.save()
+            messages.success(request, 'Регистрация прошла успешно! Войдите в аккаунт.')
             return redirect('users:login')
     else:
         form = UserForm()
-    return render(request, 'registation.html', {'form': form, 'title': 'Регистация'})
+    return render(request, 'registation.html', {'form': form, 'title': 'Регистрация'})
 
 
 class UserLogin(LoginView):
@@ -46,7 +47,7 @@ class UserLogout(LogoutView):
 class PersonalAccountView(LoginRequiredMixin, DetailView):
     model = User
     template_name = 'personal_account.html'
-    display_fields = ['username', 'email', 'first_name', 'last_name', 'birth_data']
+    display_fields = ['username', 'email', 'first_name', 'last_name', 'birth_date']
 
     def get_object(self):
         return User.objects.only(*self.display_fields).get(pk=self.request.user.pk)
@@ -68,14 +69,14 @@ class PersonalAccountView(LoginRequiredMixin, DetailView):
 class PersonalAccountEditView(LoginRequiredMixin, UpdateView):
     model = User
     template_name = 'personal_account_edit.html'
-    fields = ['username', 'email', 'first_name', 'last_name', 'birth_data']
+    fields = ['username', 'email', 'first_name', 'last_name', 'birth_date']
 
     field_names_ru = {
         'username': 'Имя пользователя',
         'email': 'Электронная почта',
         'first_name': 'Имя',
         'last_name': 'Фамилия',
-        'birth_data': 'Дата рождения',
+        'birth_date': 'Дата рождения',
     }
 
     def get_object(self):
@@ -85,7 +86,7 @@ class PersonalAccountEditView(LoginRequiredMixin, UpdateView):
         return reverse_lazy('users:account')
     
     def form_valid(self, form):
-        responce = super().form_valid(form)
+        response = super().form_valid(form)
 
         if form.changed_data:
             changed_fields = [self.field_names_ru[f] for f in form.changed_data]
@@ -94,7 +95,7 @@ class PersonalAccountEditView(LoginRequiredMixin, UpdateView):
         else:
             messages.success(self.request, 'Изменений не было!')
         
-        return responce
+        return response
 
 class MyPasswordChangeView(LoginRequiredMixin, SuccessMessageMixin, PasswordChangeView):
     template_name = 'password_edit.html'

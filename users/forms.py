@@ -5,7 +5,7 @@ from .models import User
 class UserForm(UserCreationForm):
     class Meta(UserCreationForm.Meta):
         model = User
-        fields = ['username', 'first_name', 'last_name', 'email', 'birth_data']
+        fields = ['username', 'first_name', 'last_name', 'email', 'birth_date']
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
