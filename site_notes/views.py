@@ -160,13 +160,16 @@ class AssistantFormView(FormView):
         # Обработка GET-параметра history_record
         history_record = self.request.GET.get('history_record')
         if history_record and user.is_authenticated:
-            history_item = ChatMessage.objects.get(public_id=history_record, user=user)
-            kwargs['initial'] = {
-                'message': history_item.query,
-                'model_ai': history_item.model_AI,
-                'prompt': history_item.prompt,
-            }
-            self.loaded_response = history_item.response
+            history_item = ChatMessage.objects.filter(public_id=history_record, user=user).first()
+            if history_item:
+                kwargs['initial'] = {
+                    'message': history_item.query,
+                    'model_ai': history_item.model_AI,
+                    'prompt': history_item.prompt,
+                }
+                self.loaded_response = history_item.response
+            else:
+                self.loaded_response = None
         else:
             self.loaded_response = None
             

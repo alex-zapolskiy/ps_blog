@@ -49,8 +49,8 @@ class ChatMessage(models.Model):
         user = models.ForeignKey(to= settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='ai_messages')
 
         class Meta:
-            verbose_name = 'Сообщения чата'
-            verbose_name_plural = 'Сообщении чата'
+            verbose_name = 'Сообщение чата'
+            verbose_name_plural = 'Сообщения чата'
             ordering = ['-time_create']
 
         @property
