@@ -672,7 +672,7 @@ textarea.form-control {
 }
 /* ===== КОНТЕЙНЕРЫ С ПРЕФОРМАТИРОВАННЫМ ТЕКСТОМ ===== */
 .preserved-container {
-    white-space: pre-line;
+    white-space: normal;
     padding: 40px;
     max-width: 800px;
     margin: 0 auto;

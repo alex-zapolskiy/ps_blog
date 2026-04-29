@@ -4,8 +4,8 @@ from django.db import models
 from django.urls import reverse
 
 class Sections(models.Model):
-    name = models.CharField(max_length=30, )
-    slug = models.SlugField(max_length=15, db_index=True, unique=True)
+    name = models.CharField(max_length=200)
+    slug = models.SlugField(max_length=100, db_index=True, unique=True)
     
     def __str__(self):
         return self.name
@@ -20,8 +20,8 @@ class Sections(models.Model):
     
     
 class Chapters(models.Model):
-    name = models.CharField(max_length=30, unique=True, null=False)
-    slug = models.SlugField(max_length=15, unique=True, db_index=True)
+    name = models.CharField(max_length=200, unique=True, null=False)
+    slug = models.SlugField(max_length=100, unique=True, db_index=True)
     text = models.TextField(blank=True)
     time_create = models.DateTimeField(auto_now_add=True)
     time_update = models.DateTimeField(auto_now=True)

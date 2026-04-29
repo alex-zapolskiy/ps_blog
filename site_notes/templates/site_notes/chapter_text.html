@@ -3,7 +3,7 @@
 <div class="preserved-container">
     <h1 class="preserved-title"> {{ chapter }} </h1>
     <div class="preserved-content">
-    {{ content }}
+    {{ content|safe }}
     </div>
 </div>
 {% endblock %}

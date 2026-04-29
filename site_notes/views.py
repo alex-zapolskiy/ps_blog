@@ -1,7 +1,7 @@
 import re
 from django.conf import settings
 from django.http import JsonResponse, StreamingHttpResponse
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 from django.db.models import Q
 from django.core.cache import cache
 from django.views.generic import FormView, ListView, DetailView
@@ -115,7 +115,7 @@ class ListChapters(ListSections):
         query = self.request.GET.get('search_sections')
         if query:
             safe_query = re.escape(query.strip())
-            queryset = query = Chapters.objects.filter(Q(section__slug=section_slug) & Q(name__iregex=safe_query)).only('name', 'slug', 'section_id').select_related('section')
+            queryset = Chapters.objects.filter(Q(section__slug=section_slug) & Q(name__iregex=safe_query)).only('name', 'slug', 'section_id').select_related('section')
         return queryset
     
     def get_context_data(self, **kwargs):
@@ -136,17 +136,25 @@ class ChapterText(DetailView):
         section_slug = self.kwargs.get('section_slug')
         chapter_slug = self.kwargs.get('chapter_text_slug')
         
-        return queryset.filter(section__slug=section_slug,
-            slug=chapter_slug).only('name', 'slug', 'text', 'section_id'
-                                    ).select_related('section').get()
-        
+        return get_object_or_404(
+        queryset.only('name', 'slug', 'text', 'section_id').select_related('section'),
+        section__slug=section_slug,
+        slug=chapter_slug
+    )
         
     
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         chapter = self.object
         context['title'] = chapter.name
-        context['content'] = markdown2.markdown(chapter.text)
+        context['content'] = markdown2.markdown(
+            chapter.text,
+            extras=[
+                'fenced-code-blocks',
+                'smarty-pants',
+                'tables',
+                    ]
+        )
         return context        
 
 class AssistantFormView(FormView):
