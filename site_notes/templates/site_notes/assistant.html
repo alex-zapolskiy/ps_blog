@@ -16,6 +16,15 @@
                         <p>Роль: {{ item.prompt }}</p>
                         <p>{{ item.time_create }}</p>
                     {% endfor %}
+                    <div class="pagination">
+                        {% if history.has_previous %}
+                            <a href="?history_page={{ history.previous_page_number }}"><-Назад</a>
+                        {% endif%}
+                            <span>{{ history.number }} / {{ history.paginator.num_pages }}</span>
+                        {% if history.has_next %}
+                            <a href="?history_page={{ history.next_page_number }}">Вперед-></a>
+                        {% endif %}
+                    </div>
                 {% elif user.is_authenticated %}
                     <p>История пока пуста</p>
                 {% else %}

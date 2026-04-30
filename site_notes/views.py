@@ -11,6 +11,7 @@ from .constants.promts import PROMPT_DESCRIPTIONS
 from .utils import render_markdown
 import markdown2
 from .api import APIWeather, APIAIRequest
+from django.core.paginator import Paginator
 
 
 def index(request):
@@ -189,7 +190,10 @@ class AssistantFormView(FormView):
         
         # История сообщений
         if user.is_authenticated:
-            context['history'] = ChatMessage.objects.filter(user=user)[:5]
+            history_queryset = ChatMessage.objects.filter(user=user)
+            paginator = Paginator(history_queryset, 5)
+            page_number = self.request.GET.get('history_page', 1)
+            context['history'] = paginator.get_page(page_number)
         else:
             context['history'] = None
             

@@ -296,6 +296,35 @@ body, html {
 .history-container p:last-of-type {
     border-bottom: none;
 }
+.pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 15px;
+    margin-top: 15px;
+    padding-top: 10px;
+    border-top: 1px solid #e0e0e0;
+}
+
+.pagination a {
+    padding: 6px 12px;
+    background-color: #3498db;
+    color: white !important;
+    border-radius: 5px;
+    font-size: 0.85em;
+    transition: background-color 0.2s;
+}
+
+.pagination a:hover {
+    background-color: #2980b9 !important;
+    color: white !important;
+}
+
+.pagination span {
+    color: #555a5a;
+    font-size: 0.85em;
+    font-family: 'Segoe UI';
+}
 .form-container-assistant {
     width: 100%;
     width: 700px;
