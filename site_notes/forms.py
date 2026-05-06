@@ -3,6 +3,7 @@ import re
 import requests
 from django import forms
 from django.core.cache import cache
+from .models import ContactMessage
 from site_notes.constants.promts import PROMPT_DESCRIPTIONS
 
 class AIChatForm(forms.Form):
@@ -77,3 +78,25 @@ class WeatherForm(forms.Form):
                 )
         
         return location
+    
+
+class ContactForm(forms.ModelForm):
+    class Meta:
+        model = ContactMessage
+        fields = ['name', 'email', 'message']
+        widgets = {
+            'name': forms.TextInput(attrs={
+                'placeholder': 'Ваше имя',
+                'class': 'form-control'
+            }),
+            'email': forms.EmailInput(attrs={
+                'placeholder': 'Ваше email',
+                'class': 'form-control'
+            }),
+            'message': forms.Textarea(attrs={
+                'placeholder': 'Ваше сообщение',
+                'rows': 5,
+                'style': 'resize: none;',
+                'class': 'form-control'
+            }),
+        }

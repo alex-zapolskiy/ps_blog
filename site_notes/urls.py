@@ -10,6 +10,6 @@ urlpatterns = [
     path('notes/<slug:section_slug>/<slug:chapter_text_slug>', views.ChapterText.as_view(), name='chapter_text'),
     path('assistant/', views.AssistantFormView.as_view(), name='assistant'),
     path('weather/', views.weather, name='weather'),
-    path('contacts/', views.contacts, name='contacts'),
+    path('contacts/', views.ContactView.as_view(), name='contacts'),
     path('about/', views.about, name='about')
 ]

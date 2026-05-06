@@ -4,15 +4,16 @@ from django.http import JsonResponse, StreamingHttpResponse
 from django.shortcuts import render, get_object_or_404
 from django.db.models import Q
 from django.core.cache import cache
+from django.urls import reverse_lazy
 from django.views.generic import FormView, ListView, DetailView
-from .forms import AIChatForm, WeatherForm
+from .forms import AIChatForm, ContactForm, WeatherForm
 from .models import Chapters, ChatMessage, Sections
 from .constants.promts import PROMPT_DESCRIPTIONS
 from .utils import render_markdown
 import markdown2
 from .api import APIWeather, APIAIRequest
 from django.core.paginator import Paginator
-
+from django.contrib import messages
 
 def index(request):
     return render(request, 'site_notes/index.html', {'title': 'Главная страница'})
@@ -244,8 +245,54 @@ class AssistantFormView(FormView):
         return super().form_invalid(form)
 
 
-def contacts(request):
-    return render(request, 'site_notes/contacts.html')
+class ContactView(FormView):
+    template_name = 'site_notes/contacts.html'
+    form_class = ContactForm
+    success_url = reverse_lazy('site_notes:contacts')
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['title'] = 'Контакты'
+        context['socials'] = [
+            {
+                'name': 'GitHub',
+                'url': 'https://github.com/alex-zapolskiy',
+                'icon': '🐙'
+            },
+            {
+                'name': 'Telegram',
+                'url': 'https://t.me/alex_never',
+                'icon': '✈️'
+            },
+            {
+                'name': 'LinkedIn',
+                'url': 'https://linkedin.com/in/aliaksandr-zapolskiy',
+                'icon': '💼'
+            },
+        ]
+        return context
+    
+    def form_valid(self, form):
+        user = self.request.user
+        instance = form.save(commit=False)
+        if user.is_authenticated:
+            instance.name = instance.name or f'{user.first_name}'
+            instance.email = instance.email or user.email
+        instance.save()
+        messages.success(self.request, 'Сообщение успешно отправлено!')
+        return super().form_valid(form)
+    
+    def form_invalid(self, form):
+        messages.error(self.request, 'Исправьте ошибки в форме.')
+        return super().form_invalid(form)
+    
+    def get_initial(self):
+        initial = super().get_initial()
+        user = self.request.user
+        if user.is_authenticated:
+            initial['name'] = f'{user.first_name}'
+            initial['email'] = user.email
+        return initial
 
 def about(request):
     return render(request, 'site_notes/about.html')

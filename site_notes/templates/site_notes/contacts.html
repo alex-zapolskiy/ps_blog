@@ -1,3 +1,25 @@
 {% extends "base.html" %}
-{% block content%}
-{% endblock%}
+{% block content %}
+<div class="contacts-page">
+    <div class="contacts-socials">
+        <h2>Связаться со мной</h2>
+        <div class="socials-list">
+            {% for social in socials %}
+            <a href="{{ social.url }}" target="_blank" class="social-item">
+                <span class="social-icon">{{ social.icon }}</span>
+                <span class="social-name">{{ social.name }}</span>
+            </a>
+            {% endfor %}
+        </div>
+    </div>
+    <div class="contacts-form">
+        <h2>Написать мне</h2>
+        <form method="post">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit" class="btn btn-primary">Отправить</button>
+        </form>
+    </div>
+
+</div>
+{% endblock %}

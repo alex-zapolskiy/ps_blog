@@ -817,6 +817,157 @@ textarea.form-control {
     text-align: center;
     box-shadow: var(--shadow-light);
 }
+.message-error {
+    width: 80%;
+    max-width: 600px;
+    margin: 20px auto;
+    padding: 15px 25px;
+    background-color: #e09f9f;
+    border: 2px solid #c3e6cb;
+    border-radius: 8px;
+    color: #96140b;
+    font-size: 16px;
+    font-weight: 500;
+    text-align: center;
+    box-shadow: var(--shadow-light);
+}
+/* ===== КОНТАКТЫ ===== */
+.contacts-page {
+    max-width: 800px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+}
+.contacts-page h2 {
+    font-size: 1.3em;
+    font-weight: 600;
+    color: var(--text-color);
+    margin: 0 0 20px 0;
+    padding-bottom: 10px;
+}
+/* ===== СОЦСЕТИ ===== */
+.contacts-socials {
+    background: var(--white);
+    border-radius: 8px;
+    box-shadow: var(--shadow-light);
+    padding: 20px;
+    text-align: center;
+    margin-top: 20px;
+}
+
+.socials-list {
+    display: flex;
+    gap: 15px;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.social-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 20px;
+    background: var(--bg-color);
+    border-radius: 8px;
+    text-decoration: none;
+    color: var(--text-color);
+    box-shadow: var(--shadow-light);
+    transition: all 0.2s ease;
+    border: 1px solid var(--border-color);
+}
+
+.social-item:hover {
+    background: var(--gradient-accent);
+    color: var(--white);
+    box-shadow: var(--shadow-medium);
+    transform: translateY(-2px);
+    border-color: transparent;
+}
+
+.social-icon {
+    font-size: 1.4em;
+}
+
+.social-name {
+    font-size: 0.95em;
+    font-weight: 500;
+    font-family: 'Segoe UI';
+}
+/* ===== ФОРМА КОНТАКТОВ ===== */
+.contacts-form {
+    background: var(--white);
+    border-radius: 8px;
+    box-shadow: var(--shadow-light);
+    padding: 20px;
+    max-width: 800px;
+    width: 100%;
+    margin: 0 auto;
+}
+
+.contacts-form h2 {
+    font-size: 1.3em;
+    font-weight: 600;
+    color: var(--text-color);
+    margin: 0 0 20px 0;
+    padding-bottom: 10px;
+    text-align: center;
+}
+
+/* Поля формы */
+.contacts-form p {
+    margin-bottom: 15px;
+}
+
+.contacts-form label {
+    display: block;
+    margin-bottom: 6px;
+    font-size: 0.95em;
+    font-family: 'Segoe UI';
+    color: var(--text-light);
+    font-weight: 500;
+}
+.contacts-form input,
+.contacts-form textarea {
+    width: 100%;
+    padding: 10px 14px;
+    border: 1px solid var(--border-color);
+    border-radius: 6px;
+    font-size: 0.95em;
+    font-family: 'Segoe UI';
+    color: var(--text-color);
+    background: var(--bg-color);
+    box-sizing: border-box;
+    transition: border-color 0.2s ease;
+}
+.contacts-form textarea {
+    resize: none;
+    height: 150px;
+}
+/* Кнопка */
+.contacts-form button {
+    margin-top: 5px;
+    width: 100%;
+}
+/* ===== ОШИБКИ ФОРМЫ КОНТАКТОВ ===== */
+/* Список ошибок у поля */
+.contacts-form .errorlist {
+    list-style: none;
+    padding: 0;
+    margin: 5px 0 0 0;
+}
+.contacts-form .errorlist li {
+    color: var(--danger-color);
+    font-size: 0.85em;
+    font-family: 'Segoe UI';
+    padding: 4px 0 0 0;
+}
+/* Поле с ошибкой */
+.contacts-form p:has(.errorlist) input,
+.contacts-form p:has(.errorlist) textarea {
+    border-color: var(--danger-color);
+    background: #fff8f8;
+}
 /* ===== ФУТЕР ===== */
 .site-footer {
     background: linear-gradient(135deg, var(--primary-color), #222);

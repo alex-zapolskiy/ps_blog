@@ -44,7 +44,7 @@
         <main class="main-content">
             {% if messages %}
                 {% for message in messages %}
-                    <div class="message-success">
+                    <div class="message-{{ message.tags}}">
                         {{ message }}
                     </div>
                 {% endfor %}

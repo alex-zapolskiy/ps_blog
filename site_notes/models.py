@@ -40,21 +40,37 @@ class Chapters(models.Model):
 
 
 class ChatMessage(models.Model):
-        public_id = models.UUIDField(default=uuid.uuid4, editable=True, db_index=True, unique=True)
-        query = models.TextField(verbose_name='Запрос пользователя')
-        response = models.TextField(blank=True, null=True, verbose_name='Ответ ИИ')
-        model_AI = models.CharField(default='deepseek-ai/DeepSeek-R1-0528', verbose_name='Модель ИИ')
-        prompt = models.CharField(verbose_name='Роль модели')
-        time_create = models.DateTimeField(auto_now_add=True, verbose_name='Дата запроса')
-        user = models.ForeignKey(to= settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='ai_messages')
+    public_id = models.UUIDField(default=uuid.uuid4, editable=True, db_index=True, unique=True)
+    query = models.TextField(verbose_name='Запрос пользователя')
+    response = models.TextField(blank=True, null=True, verbose_name='Ответ ИИ')
+    model_AI = models.CharField(default='deepseek-ai/DeepSeek-R1-0528', verbose_name='Модель ИИ')
+    prompt = models.CharField(verbose_name='Роль модели')
+    time_create = models.DateTimeField(auto_now_add=True, verbose_name='Дата запроса')
+    user = models.ForeignKey(to= settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='ai_messages')
 
-        class Meta:
-            verbose_name = 'Сообщение чата'
-            verbose_name_plural = 'Сообщения чата'
-            ordering = ['-time_create']
+    class Meta:
+        verbose_name = 'Сообщение чата'
+        verbose_name_plural = 'Сообщения чата'
+        ordering = ['-time_create']
 
-        @property
-        def model_after_slash(self):
+    @property
+    def model_after_slash(self):
             if '/' in self.model_AI:
                 return self.model_AI.split('/')[1]
             return self.model_AI
+        
+
+class ContactMessage(models.Model):
+    name = models.CharField(max_length=100, verbose_name='Имя')
+    email = models.EmailField(max_length=254, verbose_name='Email')
+    message = models.TextField(verbose_name='Сообщение')
+    time_create = models.DateTimeField(auto_now_add=True, verbose_name='Время отправки')
+    is_read = models.BooleanField(default=False, verbose_name='Прочитано')
+
+    class Meta:
+        verbose_name = 'Сообщение'
+        verbose_name_plural = 'Сообщения'
+        ordering = ['-time_create']
+
+    def __str__(self):
+        return f'{self.name} - {self.time_create:%d.%m.%Y}'
