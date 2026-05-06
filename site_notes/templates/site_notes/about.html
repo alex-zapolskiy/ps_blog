@@ -1,3 +1,53 @@
 {% extends "base.html" %}
-{% block content%}
-{% endblock%}
+{% block content %}
+<div class="about-page">
+
+    <!-- О проекте -->
+    <div class="about-block">
+        <h2>О проекте</h2>
+        <p>
+            Этот сайт — мой личный пет-проект, созданный с целью изучения
+            веб-разработки на Python и Django.
+        </p>
+    </div>
+
+    <!-- Цели проекта -->
+    <div class="about-block">
+        <h2>Цели проекта</h2>
+        <ul class="about-list">
+            <li>📚 Изучение Django и его экосистемы</li>
+            <li>🤖 Интеграция с AI API</li>
+            <li>🌤️ Работа с внешними API на примере погоды</li>
+            <li>🔐 Реализация системы авторизации</li>
+            <li>⚡ Изучение Redis и кеширования</li>
+        </ul>
+    </div>
+
+    <!-- Технологии -->
+    <div class="about-block">
+        <h2>Технологии</h2>
+        <div class="tech-grid">
+            <div class="tech-item">
+                <span class="tech-icon">🐍</span>
+                <span class="tech-name">Python</span>
+            </div>
+            <div class="tech-item">
+                <span class="tech-icon">🌐</span>
+                <span class="tech-name">Django</span>
+            </div>
+            <div class="tech-item">
+                <span class="tech-icon">🗄️</span>
+                <span class="tech-name">MySQL</span>
+            </div>
+            <div class="tech-item">
+                <span class="tech-icon">⚡</span>
+                <span class="tech-name">Redis</span>
+            </div>
+            <div class="tech-item">
+                <span class="tech-icon">🌤️</span>
+                <span class="tech-name">Visual Crossing API</span>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

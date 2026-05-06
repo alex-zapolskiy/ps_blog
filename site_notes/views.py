@@ -5,7 +5,7 @@ from django.shortcuts import render, get_object_or_404
 from django.db.models import Q
 from django.core.cache import cache
 from django.urls import reverse_lazy
-from django.views.generic import FormView, ListView, DetailView
+from django.views.generic import FormView, ListView, DetailView, TemplateView
 from .forms import AIChatForm, ContactForm, WeatherForm
 from .models import Chapters, ChatMessage, Sections
 from .constants.promts import PROMPT_DESCRIPTIONS
@@ -294,5 +294,10 @@ class ContactView(FormView):
             initial['email'] = user.email
         return initial
 
-def about(request):
-    return render(request, 'site_notes/about.html')
+class AboutView(TemplateView):
+    template_name = 'site_notes/about.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['title'] = 'О сайте'
+        return context

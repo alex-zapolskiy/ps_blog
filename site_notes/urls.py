@@ -11,5 +11,5 @@ urlpatterns = [
     path('assistant/', views.AssistantFormView.as_view(), name='assistant'),
     path('weather/', views.weather, name='weather'),
     path('contacts/', views.ContactView.as_view(), name='contacts'),
-    path('about/', views.about, name='about')
+    path('about/', views.AboutView.as_view(), name='about')
 ]
