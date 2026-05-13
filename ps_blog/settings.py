@@ -114,8 +114,15 @@ CACHES = {
 }
 
 
-# Параметры кэширования
+# Параметры кэширования погоды
 WEATHER_CACHE_TIMEOUT = 60*60*6 # 12 часов
+
+# Параметры кэширования статей
+NOTES_CACHE_TIMEOUT = {
+    'sections': 60*60, # 1 час
+    'chapters': 60*60, # 1 час
+    'chapter_text': 60*60*24, # 1 сутки
+}
 
 
 # Internationalization

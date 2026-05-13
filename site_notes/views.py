@@ -14,6 +14,7 @@ import markdown2
 from .api import APIWeather, APIAIRequest
 from django.core.paginator import Paginator
 from django.contrib import messages
+from .constants.caching_time import SECTIONS_CACHE, CHAPTERS_CACHE, CHAPTERS_TEXT_CACHE
 
 def index(request):
     return render(request, 'site_notes/index.html', {'title': 'Главная страница'})
@@ -88,13 +89,26 @@ class ListSections(ListView):
     model = Sections
     template_name = 'site_notes/notes.html'
     context_object_name = 'content'
+
+    def get_cache_key(self):
+        query = self.request.GET.get('search_sections', '')
+        return f'sections_list_{query}'
     
     def get_queryset(self):
-        queryset = Sections.objects.all()
-        query = self.request.GET.get('search_sections')
-        if query:
-            safe_query = re.escape(query.strip())
-            queryset = Sections.objects.filter(name__iregex=safe_query)
+        #Ключ для списка разделов
+        cache_key = self.get_cache_key()
+        queryset = cache.get(cache_key)
+
+        if queryset is None:
+            queryset = Sections.objects.all()
+            query = self.request.GET.get('search_sections')
+            if query:
+                safe_query = re.escape(query.strip())
+                queryset = queryset.filter(name__iregex=safe_query)
+
+            queryset = list(queryset)
+            cache.set(cache_key, queryset, SECTIONS_CACHE)
+        
         return queryset
     
     def get_context_data(self, **kwargs):
@@ -108,16 +122,31 @@ class ListSections(ListView):
     def get_reset_url(self):
         return self.request.path
 
+
 class ListChapters(ListSections):
     model = Chapters
 
-    def get_queryset(self):
+    def get_cache_key(self):
         section_slug = self.kwargs.get('section_slug')
-        queryset = Chapters.objects.filter(section__slug=section_slug).only('name', 'slug', 'section_id').select_related('section')
-        query = self.request.GET.get('search_sections')
-        if query:
-            safe_query = re.escape(query.strip())
-            queryset = Chapters.objects.filter(Q(section__slug=section_slug) & Q(name__iregex=safe_query)).only('name', 'slug', 'section_id').select_related('section')
+        query = self.request.GET.get('search_sections', '')
+        return f'chapters_list_{section_slug}_{query}'
+    
+    def get_queryset(self):
+        #Ключ для списка глав
+        cache_key = self.get_cache_key()
+        queryset = cache.get(cache_key)
+
+        if queryset is None:
+            section_slug = self.kwargs.get('section_slug')
+            queryset = Chapters.objects.filter(section__slug=section_slug).only('name', 'slug', 'section_id').select_related('section')
+
+            query = self.request.GET.get('search_sections')
+            if query:
+                safe_query = re.escape(query.strip())
+                queryset = Chapters.objects.filter(Q(section__slug=section_slug) & Q(name__iregex=safe_query)).only('name', 'slug', 'section_id').select_related('section')
+            
+            queryset = list(queryset)
+            cache.set(cache_key, queryset, CHAPTERS_CACHE)
         return queryset
     
     def get_context_data(self, **kwargs):
@@ -137,27 +166,41 @@ class ChapterText(DetailView):
             queryset = self.get_queryset()
         section_slug = self.kwargs.get('section_slug')
         chapter_slug = self.kwargs.get('chapter_text_slug')
-        
-        return get_object_or_404(
-        queryset.only('name', 'slug', 'text', 'section_id').select_related('section'),
-        section__slug=section_slug,
-        slug=chapter_slug
-    )
+        #Ключ для объекта главы
+        cache_key = f'chapter:{section_slug}:{chapter_slug}'
+        chapter = cache.get(cache_key)
+
+        if chapter is None:   
+            chapter = get_object_or_404(
+                queryset.only('name', 'slug', 'text', 'section_id').select_related('section'),
+                section__slug=section_slug,
+                slug=chapter_slug
+            )
+            cache.set(cache_key, chapter, CHAPTERS_TEXT_CACHE)
+
+        return chapter
         
     
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         chapter = self.object
+        
+        #Ключ для текста главы
+        cache_key = f"chapter_md:{chapter.id}"
+        
+        content_html = cache.get(cache_key)
+        
+        if content_html is None:
+            content_html = markdown2.markdown(
+                chapter.text,
+                extras=['fenced-code-blocks', 'smarty-pants', 'tables']
+            )
+            cache.set(cache_key, content_html, CHAPTERS_TEXT_CACHE)
+        
         context['title'] = chapter.name
-        context['content'] = markdown2.markdown(
-            chapter.text,
-            extras=[
-                'fenced-code-blocks',
-                'smarty-pants',
-                'tables',
-                    ]
-        )
-        return context        
+        context['content'] = content_html
+        return context  
+
 
 class AssistantFormView(FormView):
     template_name = 'site_notes/assistant.html'
