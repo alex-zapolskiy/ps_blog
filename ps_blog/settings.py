@@ -122,6 +122,7 @@ NOTES_CACHE_TIMEOUT = {
     'sections': 60*60, # 1 час
     'chapters': 60*60, # 1 час
     'chapter_text': 60*60*24, # 1 сутки
+    'ai_history_record': 300, # 5 минус
 }
 
 

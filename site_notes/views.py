@@ -14,7 +14,7 @@ import markdown2
 from .api import APIWeather, APIAIRequest
 from django.core.paginator import Paginator
 from django.contrib import messages
-from .constants.caching_time import SECTIONS_CACHE, CHAPTERS_CACHE, CHAPTERS_TEXT_CACHE
+from .constants.caching_time import SECTIONS_CACHE, CHAPTERS_CACHE, CHAPTERS_TEXT_CACHE, AI_HISTORY_RECORS_CACHE
 
 def index(request):
     return render(request, 'site_notes/index.html', {'title': 'Главная страница'})
@@ -234,10 +234,17 @@ class AssistantFormView(FormView):
         
         # История сообщений
         if user.is_authenticated:
-            history_queryset = ChatMessage.objects.filter(user=user)
-            paginator = Paginator(history_queryset, 5)
             page_number = self.request.GET.get('history_page', 1)
-            context['history'] = paginator.get_page(page_number)
+
+            cache_key = f'chat_history:{user.id}:{page_number}'
+            cached_history = cache.get(cache_key)
+            if cached_history is None:
+                history_queryset = ChatMessage.objects.filter(user=user)
+                paginator = Paginator(history_queryset, 5)
+                cached_history = paginator.get_page(page_number)
+                cache.set(cache_key, cached_history, AI_HISTORY_RECORS_CACHE)
+            
+            context['history'] = cached_history
         else:
             context['history'] = None
             
@@ -261,7 +268,9 @@ class AssistantFormView(FormView):
                 prompt = PROMPT_DESCRIPTIONS[prompt],
                 user=user
             )
-        
+            #Удаляем кеш истории первой страницы после запроса, т.к. туда попадает новая запись
+            cache.delete(f'chat_history:{user.id}:1')
+
         if self.request.headers.get('X-Requested-With') == 'XMLHttpRequest':
             return self.stream_response(message, model_ai, prompt, chat_obj)
         

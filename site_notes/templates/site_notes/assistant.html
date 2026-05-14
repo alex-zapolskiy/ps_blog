@@ -11,7 +11,7 @@
                 <h3>История запросов</h3>
                 {% if history %}
                     {% for item in history %}
-                        <a href="?history_record={{ item.public_id }}"">{{ item.query|truncatechars:25 }}</a>
+                        <a href="?history_record={{ item.public_id }}&history_page={{ history.number }}">{{ item.query|truncatechars:25 }}</a>
                         <p>Модель: {{ item.model_after_slash }}</p>
                         <p>Роль: {{ item.prompt }}</p>
                         <p>{{ item.time_create }}</p>
@@ -19,7 +19,7 @@
                     <div class="pagination">
                         {% if history.has_previous %}
                             <a href="?history_page={{ history.previous_page_number }}"><-Назад</a>
-                        {% endif%}
+                        {% endif %}
                             <span>{{ history.number }} / {{ history.paginator.num_pages }}</span>
                         {% if history.has_next %}
                             <a href="?history_page={{ history.next_page_number }}">Вперед-></a>
