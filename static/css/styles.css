@@ -14,34 +14,42 @@
     --shadow-medium: 0 3px 15px rgba(0,0,0,0.08);
     --shadow-heavy: 0 5px 25px rgba(0,0,0,0.12);
     --gradient-accent: linear-gradient(90deg, var(--accent-color), #2196F3);
+    --font-base: Arial, sans-serif;
+    --font-ui: 'Segoe UI', Arial, sans-serif;
 }
+
 /* ===== БАЗОВЫЕ СТИЛИ ===== */
 * {
     box-sizing: border-box;
 }
+
 body, html {
     margin: 0;
     padding: 0;
     height: 100%;
-    font-family: Arial, sans-serif;
+    font-family: var(--font-base);
     line-height: 1.6;
     color: var(--text-color);
     background-color: var(--bg-color);
 }
+
 .page-wrapper {
     display: flex;
     flex-direction: column;
     min-height: 100vh;
 }
+
 .content {
     flex: 1 0 auto;
 }
+
 .container {
-    width: 80%;
+    width: 90%;
     max-width: 1200px;
     margin: 20px auto;
     padding: 0 20px;
 }
+
 /* ===== ШАПКА ===== */
 .site-header {
     background: var(--primary-color);
@@ -50,30 +58,33 @@ body, html {
     text-align: center;
     box-shadow: var(--shadow-light);
 }
+
 .site-title {
     margin: 0 0 10px 0;
     font-size: 2.5em;
     font-weight: 300;
     letter-spacing: -0.5px;
 }
+
 .site-subtitle {
-    margin: 0;
+    margin: 0 auto;
     font-size: 1.2em;
     opacity: 0.8;
     font-weight: 300;
     max-width: 600px;
-    margin: 0 auto;
     line-height: 1.5;
 }
+
 /* ===== НАВИГАЦИЯ ===== */
 .site-nav {
     background: var(--secondary-color);
-    padding: 15px 0;
+    padding: 10px 0;
     position: sticky;
     top: 0;
     z-index: 1000;
     box-shadow: var(--shadow-light);
 }
+
 .site-nav ul {
     list-style: none;
     padding: 0;
@@ -83,41 +94,46 @@ body, html {
     flex-wrap: wrap;
     gap: 5px;
 }
+
 .site-nav ul li {
     margin: 0;
 }
+
 .site-nav ul li a {
     color: var(--white);
     text-decoration: none;
-    padding: 10px 20px;
+    padding: 8px 16px;
     border-radius: 25px;
     transition: all 0.3s ease;
     font-weight: 500;
     display: block;
     border: 2px solid transparent;
 }
+
 .site-nav ul li a:hover,
 .site-nav ul li a:focus {
     background-color: rgba(255, 255, 255, 0.15);
     transform: translateY(-2px);
     box-shadow: var(--shadow-light);
 }
+
 .site-nav ul li a.active {
     background-color: var(--accent-color);
-    color: white;
+    color: var(--white);
     border-color: rgba(255, 255, 255, 0.3);
     font-weight: 600;
 }
+
 /* ===== ИЗОБРАЖЕНИЕ ===== */
 .hero-image {
     width: 100%;
     margin: 0 0 30px 0;
-    padding: 0;
     overflow: hidden;
     position: relative;
     border-radius: 10px;
     box-shadow: var(--shadow-medium);
 }
+
 .hero-image img {
     width: 100%;
     height: auto;
@@ -126,9 +142,11 @@ body, html {
     object-fit: cover;
     transition: transform 0.5s ease;
 }
+
 .hero-image:hover img {
     transform: scale(1.02);
 }
+
 .image-caption {
     text-align: center;
     padding: 15px 20px;
@@ -139,11 +157,13 @@ body, html {
     font-size: 0.95em;
     line-height: 1.5;
 }
+
 /* ===== СЕКЦИИ ===== */
 .welcome-section {
     margin-top: 50px;
     padding: 30px 0;
 }
+
 .section-title {
     text-align: center;
     color: var(--text-color);
@@ -153,6 +173,7 @@ body, html {
     position: relative;
     padding-bottom: 20px;
 }
+
 .section-title:after {
     content: '';
     position: absolute;
@@ -164,13 +185,15 @@ body, html {
     background: var(--gradient-accent);
     border-radius: 2px;
 }
+
 /* ===== КАРТОЧКИ ===== */
 .welcome-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
     gap: 30px;
     margin-top: 40px;
 }
+
 .card {
     background: var(--white);
     padding: 30px;
@@ -184,6 +207,7 @@ body, html {
     position: relative;
     overflow: hidden;
 }
+
 .card:before {
     content: '';
     position: absolute;
@@ -195,14 +219,17 @@ body, html {
     transform: scaleX(0);
     transition: transform 0.3s ease;
 }
+
 .card:hover {
     transform: translateY(-8px);
     box-shadow: var(--shadow-heavy);
     border-color: var(--border-color);
 }
+
 .card:hover:before {
     transform: scaleX(1);
 }
+
 .card-icon {
     font-size: 2.5em;
     margin-bottom: 20px;
@@ -210,26 +237,31 @@ body, html {
     text-align: center;
     transition: transform 0.3s ease;
 }
+
 .card:hover .card-icon {
     transform: scale(1.1);
 }
+
 .card-title {
     margin: 0 0 15px 0;
     font-size: 1.4em;
     font-weight: 600;
     text-align: center;
 }
+
 .card-title a {
     text-decoration: none;
     color: var(--text-color);
     transition: all 0.3s ease;
     display: inline-block;
 }
+
 .card-title a:hover {
     color: #3498db;
     opacity: 0.8;
     transform: translateY(-1px);
 }
+
 .card-content {
     color: var(--text-light);
     line-height: 1.7;
@@ -238,9 +270,29 @@ body, html {
     text-align: center;
 }
 
-/* ===== ФОРМЫ (ОБЩИЕ СТИЛИ) ===== */
+/* ===== ОБЩИЕ СТИЛИ ПОЛЕЙ ФОРМ ===== */
+/* Базовый вид поля — используется везде */
+.field-input {
+    width: 100%;
+    padding: 12px;
+    border: 2px solid var(--border-color);
+    border-radius: 8px;
+    font-size: 16px;
+    font-family: var(--font-base);
+    transition: all 0.3s ease;
+    background-color: var(--white);
+    color: var(--text-color);
+}
+
+.field-input:focus {
+    outline: none;
+    border-color: var(--accent-color);
+    box-shadow: 0 0 5px rgba(76, 175, 80, 0.3);
+}
+
+/* ===== ФОРМ-КОНТЕЙНЕРЫ ===== */
 .form-container {
-    width: 80%;
+    width: 90%;
     max-width: 800px;
     margin: 20px auto;
     padding: 20px;
@@ -248,95 +300,25 @@ body, html {
     border-radius: 8px;
     box-shadow: var(--shadow-light);
 }
-.main-layout {
-    display: flex;
-    gap: 20px;
-    max-width: 1400px;
-    margin: 20px auto;
 
-}
-.history-container {
-    width: 350px;
-    flex-shrink: 0;
-    background: var(--white);
-    border-radius: 8px;
-    box-shadow: var(--shadow-light);
-    padding: 20px;
-    top: 20px;
-}
-.history-container h3 {
-    margin: 0 0 20px 0;
-    padding-bottom: 10px;
-    color: #2c3e50;
-    font-size: 1.3em;
-    font-weight: 600;
-    border-bottom: 2px solid #3498db;
-}
-.history-container h3::before {
-    content: "📋 ";
-    margin-right: 5px;
-}
-.history-container a {
-    padding: 15px;
-    text-decoration: none;
-    color: #2c3e50;
-    display: block;
-}
-.history-container a:hover {
-    background-color: #afcced;
-    color: #2980b9;
-}
-
-.history-container p {
-    margin: 4px 0 12px 12px;
-    color: #7f8c8d;
-    font-size: 0.85em;
-    font-family: 'Segoe UI';
-}
-.history-container p:last-of-type {
-    border-bottom: none;
-}
-.pagination {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 15px;
-    margin-top: 15px;
-    padding-top: 10px;
-    border-top: 1px solid #e0e0e0;
-}
-
-.pagination a {
-    padding: 6px 12px;
-    background-color: #3498db;
-    color: white !important;
-    border-radius: 5px;
-    font-size: 0.85em;
-    transition: background-color 0.2s;
-}
-
-.pagination a:hover {
-    background-color: #2980b9 !important;
-    color: white !important;
-}
-
-.pagination span {
-    color: #555a5a;
-    font-size: 0.85em;
-    font-family: 'Segoe UI';
-}
 .form-container-assistant {
     width: 100%;
-    width: 700px;
     padding: 20px;
     background: var(--white);
     border-radius: 8px;
     box-shadow: var(--shadow-light);
 }
+
+/* Поля для form.as_p и .form-group */
+.form-container p,
+.form-container-assistant p,
 .form-group {
-    margin-bottom: 20px;
+    margin: 0 0 20px 0;
+    padding: 0;
 }
 
+.form-container label,
+.form-container-assistant label,
 .form-group label {
     display: block;
     margin-bottom: 8px;
@@ -344,87 +326,51 @@ body, html {
     color: var(--text-color);
 }
 
-.form-control {
-    width: 100%;
-    padding: 12px;
-    border: 2px solid var(--border-color);
-    border-radius: 8px;
-    font-size: 16px;
-    box-sizing: border-box;
-    font-family: Arial, sans-serif;
-    transition: all 0.3s ease;
-    background-color: var(--white);
-    color: var(--text-color);
-}
-
-.form-control:focus {
-    outline: none;
-    border-color: var(--accent-color);
-    box-shadow: 0 0 5px rgba(76, 175, 80, 0.3);
-}
-textarea.form-control {
-    min-height: 120px;
-    resize: vertical;
-}
-
-/* Стили для полей ввода, которые генерируются form.as_p */
-.form-container p, .form-container-assistant p {
-    margin: 0 0 20px 0;
-    padding: 0;
-}
-
-.form-container label, .form-container-assistant label {
-    display: block;
-    margin-bottom: 8px;
-    font-weight: 600;
-    color: var(--text-color);
-}
 .form-container input[type="text"],
 .form-container input[type="email"],
 .form-container input[type="password"],
 .form-container input[type="number"],
 .form-container input[type="url"],
 .form-container select,
+.form-container textarea,
+.form-container-assistant input[type="text"],
 .form-container-assistant select,
-.form-container-assistant input[type="text"] {
+.form-container-assistant textarea,
+.form-control {
     width: 100%;
     padding: 12px;
     border: 2px solid var(--border-color);
     border-radius: 8px;
     font-size: 16px;
-    box-sizing: border-box;
-    font-family: Arial, sans-serif;
+    font-family: var(--font-base);
     transition: all 0.3s ease;
     background-color: var(--white);
     color: var(--text-color);
 }
-.form-container textarea, .form-container-assistant textarea {
-    width: 100%;
-    padding: 12px;
-    border: 2px solid var(--border-color);
-    border-radius: 8px;
-    font-size: 16px;
-    box-sizing: border-box;
-    font-family: Arial, sans-serif;
-    transition: all 0.3s ease;
-    background-color: var(--white);
-    color: var(--text-color);
-    min-height: 120px;
-    resize: vertical;
-}
+
 .form-container input[type="text"]:focus,
 .form-container input[type="email"]:focus,
 .form-container input[type="password"]:focus,
 .form-container input[type="number"]:focus,
 .form-container input[type="url"]:focus,
 .form-container select:focus,
-.form-container textarea:focus {
+.form-container textarea:focus,
+.form-control:focus {
     outline: none;
     border-color: var(--accent-color);
     box-shadow: 0 0 5px rgba(76, 175, 80, 0.3);
 }
-/* Стили для ошибок форм */
-.form-container .errorlist {
+
+.form-container textarea,
+.form-container-assistant textarea,
+textarea.form-control {
+    min-height: 120px;
+    resize: vertical;
+}
+
+/* Ошибки форм */
+.form-container .errorlist,
+.contacts-form .errorlist {
     list-style: none;
     padding: 0;
     margin: 5px 0 0 0;
@@ -432,8 +378,11 @@ textarea.form-control {
     font-size: 0.9em;
 }
 
-.form-container .errorlist li {
-    padding: 5px 0;
+.form-container .errorlist li,
+.contacts-form .errorlist li {
+    padding: 4px 0 0 0;
+    font-family: var(--font-ui);
+    font-size: 0.85em;
 }
 
 .form-container .helptext {
@@ -443,7 +392,8 @@ textarea.form-control {
     color: var(--text-light);
     font-style: italic;
 }
-/* Стили для чекбоксов и радио-кнопок */
+
+/* Чекбоксы и радио */
 .form-container input[type="checkbox"],
 .form-container input[type="radio"] {
     margin-right: 8px;
@@ -457,6 +407,89 @@ textarea.form-control {
     margin-bottom: 0;
     vertical-align: middle;
 }
+
+/* ===== ЛЕЙАУТ С ИСТОРИЕЙ ===== */
+.main-layout {
+    display: flex;
+    gap: 20px;
+    max-width: 1400px;
+    margin: 20px auto;
+}
+
+.history-container {
+    width: 300px;
+    flex-shrink: 0;
+    background: var(--white);
+    border-radius: 8px;
+    box-shadow: var(--shadow-light);
+    padding: 20px;
+}
+
+.history-container h3 {
+    margin: 0 0 20px 0;
+    padding-bottom: 10px;
+    color: #2c3e50;
+    font-size: 1.3em;
+    font-weight: 600;
+    border-bottom: 2px solid #3498db;
+}
+
+.history-container h3::before {
+    content: "📋 ";
+    margin-right: 5px;
+}
+
+.history-container a {
+    padding: 15px;
+    text-decoration: none;
+    color: #2c3e50;
+    display: block;
+}
+
+.history-container a:hover {
+    background-color: #afcced;
+    color: #2980b9;
+}
+
+.history-container p {
+    margin: 4px 0 12px 12px;
+    color: #7f8c8d;
+    font-size: 0.85em;
+    font-family: var(--font-ui);
+}
+
+/* ===== ПАГИНАЦИЯ ===== */
+.pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 15px;
+    margin-top: 15px;
+    padding-top: 10px;
+    border-top: 1px solid #e0e0e0;
+}
+
+.pagination a {
+    padding: 6px 12px;
+    background-color: #3498db;
+    color: var(--white) !important;
+    border-radius: 5px;
+    font-size: 0.85em;
+    transition: background-color 0.2s;
+}
+
+.pagination a:hover {
+    background-color: #2980b9 !important;
+    color: var(--white) !important;
+}
+
+.pagination span {
+    color: #555a5a;
+    font-size: 0.85em;
+    font-family: var(--font-ui);
+}
+
+/* ===== КНОПКИ ===== */
 .btn {
     padding: 12px 24px;
     border: none;
@@ -464,14 +497,14 @@ textarea.form-control {
     font-size: 16px;
     cursor: pointer;
     margin-right: 10px;
-    font-family: Arial, sans-serif;
+    font-family: var(--font-base);
     transition: all 0.3s ease;
     font-weight: 600;
 }
 
 .btn-primary {
     background-color: var(--accent-color);
-    color: white;
+    color: var(--white);
     text-decoration: none;
 }
 
@@ -482,7 +515,7 @@ textarea.form-control {
 
 .btn-danger {
     background-color: var(--danger-color);
-    color: white;
+    color: var(--white);
     text-decoration: none;
 }
 
@@ -490,6 +523,8 @@ textarea.form-control {
     background-color: #da190b;
     text-decoration: none;
 }
+
+/* Кнопка в навбаре (форма как ссылка) */
 .btn-form-action {
     background: transparent;
     border: 2px solid transparent;
@@ -497,14 +532,15 @@ textarea.form-control {
     display: block;
     color: var(--white);
     text-decoration: none;
-    padding: 10px 20px;
+    padding: 8px 16px;
     border-radius: 25px;
     font-weight: 500;
-    font-family: Arial, sans-serif;
+    font-family: var(--font-base);
     font-size: 16px;
     transition: all 0.3s ease;
     margin: 0 5px;
 }
+
 .btn-form-action:hover,
 .btn-form-action:focus {
     background-color: rgba(255, 255, 255, 0.15);
@@ -512,17 +548,95 @@ textarea.form-control {
     box-shadow: var(--shadow-light);
     outline: none;
 }
+
 .btn-form-action:active {
     transform: translateY(0);
     filter: brightness(0.8);
 }
 
+/* Кнопки личного кабинета */
+.btn-form-edit,
+.btn-form-cancel {
+    width: 100%;
+    padding: 14px;
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    margin-top: 10px;
+    text-align: center;
+    text-decoration: none;
+    color: var(--white);
+}
+
+.btn-form-edit {
+    background-color: var(--accent-color);
+}
+
+.btn-form-cancel {
+    background-color: var(--danger-color);
+}
+
+/* ===== УВЕДОМЛЕНИЯ ===== */
 .alert-info {
     padding: 12px 20px;
     margin-top: 20px;
     text-align: center;
     font-size: 16px;
     font-weight: 500;
+}
+
+/* Общие стили для сообщений успеха/ошибки */
+.message-success,
+.message-error {
+    width: 90%;
+    max-width: 600px;
+    margin: 20px auto;
+    padding: 15px 25px;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: 500;
+    text-align: center;
+    box-shadow: var(--shadow-light);
+    border: 2px solid;
+}
+
+.message-success {
+    background-color: #d4edda;
+    border-color: #c3e6cb;
+    color: #155724;
+}
+
+.message-error {
+    background-color: #e09f9f;
+    border-color: #f44336;
+    color: #96140b;
+}
+
+.error-message {
+    background-color: #fef2f2;
+    border: 1px solid #fecaca;
+    border-left: 4px solid var(--danger-color);
+    color: #7f1d1d;
+    padding: 16px 20px;
+    border-radius: 6px;
+    margin: 15px 0;
+    font-size: 0.95em;
+    line-height: 1.5;
+    box-shadow: var(--shadow-light);
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+}
+
+.error-message::before {
+    content: "⚠";
+    color: var(--danger-color);
+    font-weight: bold;
+    font-size: 1.1em;
+    flex-shrink: 0;
+    margin-top: 1px;
 }
 
 /* ===== ПОСТЫ И СПИСКИ ===== */
@@ -620,8 +734,8 @@ textarea.form-control {
 }
 
 .weather-table th {
-    background-color: var(--primary-color, #2196F3);
-    color: white;
+    background-color: var(--primary-color);
+    color: var(--white);
     padding: 12px 15px;
     text-align: left;
     font-size: 0.9em;
@@ -675,37 +789,13 @@ textarea.form-control {
     margin-top: 0;
 }
 
-/* ===== СООБЩЕНИЯ ОБ ОШИБКАХ ===== */
-.error-message {
-    background-color: #fef2f2;
-    border: 1px solid #fecaca;
-    border-left: 4px solid var(--danger-color);
-    color: #7f1d1d;
-    padding: 16px 20px;
-    border-radius: 6px;
-    margin: 15px 0;
-    font-size: 0.95em;
-    line-height: 1.5;
-    box-shadow: var(--shadow-light);
-    display: flex;
-    align-items: flex-start;
-    gap: 12px;
-}
-.error-message::before {
-    content: "⚠";
-    color: var(--danger-color);
-    font-weight: bold;
-    font-size: 1.1em;
-    flex-shrink: 0;
-    margin-top: 1px;
-}
-/* ===== КОНТЕЙНЕРЫ С ПРЕФОРМАТИРОВАННЫМ ТЕКСТОМ ===== */
+/* ===== КОНТЕЙНЕРЫ С ТЕКСТОМ ===== */
 .preserved-container {
     white-space: normal;
-    padding: 40px;
+    padding: 30px 20px;
     max-width: 800px;
     margin: 0 auto;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-family: var(--font-ui);
 }
 
 .preserved-title {
@@ -716,6 +806,7 @@ textarea.form-control {
     font-weight: 400;
     line-height: 1.3;
 }
+
 .preserved-content {
     font-size: 1.05em;
     line-height: 1.7;
@@ -724,9 +815,10 @@ textarea.form-control {
     border-radius: 8px;
     box-shadow: var(--shadow-light);
 }
+
 /* ===== ЛИЧНЫЙ КАБИНЕТ ===== */
 .personal_account {
-    width: 80%;
+    width: 90%;
     max-width: 600px;
     margin: 20px auto;
     padding: 25px;
@@ -737,7 +829,6 @@ textarea.form-control {
     flex-direction: column;
 }
 
-/* Заголовки полей */
 .personal_account h3 {
     margin: 0 0 8px 0;
     font-size: 14px;
@@ -746,6 +837,7 @@ textarea.form-control {
     text-transform: uppercase;
     opacity: 0.7;
 }
+
 .personal_account p {
     margin: 0 0 15px 0;
     padding: 12px;
@@ -754,11 +846,11 @@ textarea.form-control {
     border-radius: 8px;
     font-size: 16px;
     color: var(--text-color);
-    min-height: 48px; /* Чтобы пустые поля не схлопывались */
+    min-height: 48px;
     display: flex;
     align-items: center;
-    box-sizing: border-box;
 }
+
 .personal_account input {
     width: 100%;
     margin-bottom: 20px;
@@ -766,7 +858,6 @@ textarea.form-control {
     border: 2px solid var(--border-color);
     border-radius: 8px;
     font-size: 16px;
-    box-sizing: border-box;
     transition: all 0.3s ease;
 }
 
@@ -775,63 +866,23 @@ textarea.form-control {
     border-color: var(--accent-color);
     box-shadow: 0 0 5px rgba(76, 175, 80, 0.2);
 }
-.btn-form-edit {
-    width: 100%;
-    padding: 14px;
-    background-color: var(--accent-color, #4CAF50);
-    color: white;
-    border: none;
-    border-radius: 8px;
-    font-size: 16px;
-    font-weight: 600;
-    cursor: pointer;
-    margin-top: 10px;
-    text-align: center;
-    text-decoration: none;
-}
-.btn-form-cancel {
-    width: 100%;
-    padding: 14px;
-    background-color: var(--danger-color, #f44336);
-    color: white;
-    border: none;
-    border-radius: 8px;
-    font-size: 16px;
-    font-weight: 600;
-    cursor: pointer;
-    margin-top: 10px;
-    text-align: center;
-    text-decoration: none;
-}
-.message-success {
-    width: 80%;
-    max-width: 600px;
-    margin: 20px auto;
-    padding: 15px 25px;
-    background-color: #d4edda;
-    border: 2px solid #c3e6cb;
-    border-radius: 8px;
-    color: #155724;
-    font-size: 16px;
-    font-weight: 500;
-    text-align: center;
-    box-shadow: var(--shadow-light);
-}
-.message-error {
-    width: 80%;
-    max-width: 600px;
-    margin: 20px auto;
-    padding: 15px 25px;
-    background-color: #e09f9f;
-    border: 2px solid #c3e6cb;
-    border-radius: 8px;
-    color: #96140b;
-    font-size: 16px;
-    font-weight: 500;
-    text-align: center;
-    box-shadow: var(--shadow-light);
-}
+
 /* ===== КОНТАКТЫ ===== */
+/* Общие стили заголовков блоков контактов и about */
+.contacts-page h2,
+.contacts-form h2,
+.about-block h2 {
+    font-size: 1.3em;
+    font-weight: 600;
+    color: var(--text-color);
+    margin: 0 0 20px 0;
+    padding-bottom: 10px;
+}
+
+.contacts-form h2 {
+    text-align: center;
+}
+
 .contacts-page {
     max-width: 800px;
     margin: 0 auto;
@@ -839,13 +890,7 @@ textarea.form-control {
     flex-direction: column;
     gap: 30px;
 }
-.contacts-page h2 {
-    font-size: 1.3em;
-    font-weight: 600;
-    color: var(--text-color);
-    margin: 0 0 20px 0;
-    padding-bottom: 10px;
-}
+
 /* ===== СОЦСЕТИ ===== */
 .contacts-socials {
     background: var(--white);
@@ -892,8 +937,9 @@ textarea.form-control {
 .social-name {
     font-size: 0.95em;
     font-weight: 500;
-    font-family: 'Segoe UI';
+    font-family: var(--font-ui);
 }
+
 /* ===== ФОРМА КОНТАКТОВ ===== */
 .contacts-form {
     background: var(--white);
@@ -905,16 +951,6 @@ textarea.form-control {
     margin: 0 auto;
 }
 
-.contacts-form h2 {
-    font-size: 1.3em;
-    font-weight: 600;
-    color: var(--text-color);
-    margin: 0 0 20px 0;
-    padding-bottom: 10px;
-    text-align: center;
-}
-
-/* Поля формы */
 .contacts-form p {
     margin-bottom: 15px;
 }
@@ -923,10 +959,11 @@ textarea.form-control {
     display: block;
     margin-bottom: 6px;
     font-size: 0.95em;
-    font-family: 'Segoe UI';
+    font-family: var(--font-ui);
     color: var(--text-light);
     font-weight: 500;
 }
+
 .contacts-form input,
 .contacts-form textarea {
     width: 100%;
@@ -934,40 +971,34 @@ textarea.form-control {
     border: 1px solid var(--border-color);
     border-radius: 6px;
     font-size: 0.95em;
-    font-family: 'Segoe UI';
+    font-family: var(--font-ui);
     color: var(--text-color);
     background: var(--bg-color);
-    box-sizing: border-box;
     transition: border-color 0.2s ease;
 }
+
+.contacts-form input:focus,
+.contacts-form textarea:focus {
+    outline: none;
+    border-color: var(--accent-color);
+}
+
 .contacts-form textarea {
     resize: none;
     height: 150px;
 }
-/* Кнопка */
+
 .contacts-form button {
     margin-top: 5px;
     width: 100%;
 }
-/* ===== ОШИБКИ ФОРМЫ КОНТАКТОВ ===== */
-/* Список ошибок у поля */
-.contacts-form .errorlist {
-    list-style: none;
-    padding: 0;
-    margin: 5px 0 0 0;
-}
-.contacts-form .errorlist li {
-    color: var(--danger-color);
-    font-size: 0.85em;
-    font-family: 'Segoe UI';
-    padding: 4px 0 0 0;
-}
-/* Поле с ошибкой */
+
 .contacts-form p:has(.errorlist) input,
 .contacts-form p:has(.errorlist) textarea {
     border-color: var(--danger-color);
     background: #fff8f8;
 }
+
 /* ===== О САЙТЕ ===== */
 .about-page {
     max-width: 800px;
@@ -985,22 +1016,13 @@ textarea.form-control {
     text-align: center;
 }
 
-.about-block h2 {
-    font-size: 1.3em;
-    font-weight: 600;
-    color: var(--text-color);
-    margin: 0 0 15px 0;
-    padding-bottom: 10px;
-}
-
 .about-block p {
     color: var(--text-light);
-    font-family: 'Segoe UI';
+    font-family: var(--font-ui);
     line-height: 1.7;
     margin: 0;
 }
 
-/* Список целей */
 .about-list {
     list-style: none;
     padding: 0;
@@ -1012,7 +1034,7 @@ textarea.form-control {
 
 .about-list li {
     color: var(--text-light);
-    font-family: 'Segoe UI';
+    font-family: var(--font-ui);
     font-size: 0.95em;
     padding: 10px 15px;
     background: var(--bg-color);
@@ -1021,7 +1043,6 @@ textarea.form-control {
     text-align: center;
 }
 
-/* Сетка технологий */
 .tech-grid {
     display: flex;
     flex-wrap: wrap;
@@ -1055,19 +1076,16 @@ textarea.form-control {
 .tech-name {
     font-size: 0.9em;
     font-weight: 500;
-    font-family: 'Segoe UI';
+    font-family: var(--font-ui);
 }
+
 /* ===== ФУТЕР ===== */
 .site-footer {
     background: linear-gradient(135deg, var(--primary-color), #222);
     color: var(--white);
     text-align: center;
-    padding: 30px 0;
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    width: 100%;
-    z-index: 1000;
+    padding: 20px 0;
+    position: relative;
     flex-shrink: 0;
 }
 
@@ -1093,10 +1111,11 @@ textarea.form-control {
     font-style: italic;
 }
 
-/* Добавляем отступ для основного контента, чтобы он не перекрывался футером */
 .main-content {
-    padding-bottom: 150px;
+    padding-bottom: 30px;
 }
+
+/* ===== АВТОРИЗАЦИЯ ===== */
 .auth-footer {
     margin-top: 25px;
     padding: 15px;
@@ -1107,6 +1126,7 @@ textarea.form-control {
     border-radius: 10px;
     border: 1px solid #eee;
 }
+
 .auth-link {
     color: #4a90e2;
     text-decoration: none;
@@ -1115,8 +1135,185 @@ textarea.form-control {
     padding: 2px 4px;
     transition: all 0.2s ease-in-out;
 }
+
 .auth-link:hover {
     color: #2a64ad;
     background-color: rgba(74, 144, 226, 0.1);
     border-radius: 4px;
+}
+
+/* ===== МЕДИА-ЗАПРОСЫ ===== */
+
+/* Планшет (≤ 900px) */
+@media (max-width: 900px) {
+    .main-layout {
+        flex-direction: column;
+    }
+
+    .history-container {
+        width: 100%;
+    }
+
+    .form-container-assistant {
+        width: 100%;
+    }
+
+    .section-title {
+        font-size: 1.8em;
+    }
+
+    .welcome-grid {
+        grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+        gap: 20px;
+    }
+
+    .weather-table th,
+    .weather-table td {
+        padding: 10px 8px;
+        font-size: 0.9em;
+    }
+}
+
+/* Мобильный (≤ 600px) */
+@media (max-width: 600px) {
+    .container,
+    .form-container,
+    .personal_account {
+        width: 100%;
+        padding: 0 12px;
+    }
+
+    .site-title {
+        font-size: 1.8em;
+    }
+
+    .site-subtitle {
+        font-size: 1em;
+    }
+
+    .site-nav ul {
+        gap: 3px;
+    }
+
+    .site-nav ul li a,
+    .btn-form-action {
+        padding: 7px 12px;
+        font-size: 0.9em;
+    }
+
+    .welcome-section {
+        margin-top: 20px;
+        padding: 15px 0;
+    }
+
+    .section-title {
+        font-size: 1.5em;
+        margin-bottom: 25px;
+    }
+
+    .welcome-grid {
+        grid-template-columns: 1fr;
+        gap: 15px;
+    }
+
+    .card {
+        padding: 20px;
+    }
+
+    .hero-image img {
+        max-height: 220px;
+    }
+
+    /* Таблица погоды — скролл по горизонтали */
+    .weather-widget {
+        overflow-x: auto;
+        padding: 15px 10px;
+    }
+
+    .weather-table {
+        min-width: 480px;
+    }
+
+    .weather-form {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .weather-form .form-group {
+        max-width: 100%;
+    }
+
+    .weather-form .btn {
+        width: 100%;
+        margin-right: 0;
+    }
+
+    .main-layout {
+        margin: 10px auto;
+    }
+
+    .history-container {
+        padding: 15px;
+    }
+
+    .form-container,
+    .form-container-assistant,
+    .contacts-form,
+    .about-block,
+    .contacts-socials {
+        padding: 15px;
+        border-radius: 6px;
+    }
+
+    .preserved-container {
+        padding: 15px;
+    }
+
+    .preserved-title {
+        font-size: 1.5em;
+        margin-bottom: 20px;
+    }
+
+    .preserved-content {
+        padding: 15px;
+    }
+
+    .personal_account {
+        padding: 15px;
+    }
+
+    .contacts-page,
+    .about-page {
+        gap: 15px;
+    }
+
+    .socials-list {
+        gap: 10px;
+    }
+
+    .social-item {
+        padding: 10px 14px;
+        font-size: 0.9em;
+    }
+
+    .btn {
+        padding: 10px 18px;
+        font-size: 15px;
+        margin-right: 5px;
+    }
+
+    .message-success,
+    .message-error {
+        width: 100%;
+        margin: 10px 0;
+    }
+
+    .site-footer {
+        padding: 15px 0;
+    }
+
+    .pagination {
+        gap: 10px;
+        flex-wrap: wrap;
+    }
 }
